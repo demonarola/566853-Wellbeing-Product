@@ -1,0 +1,231 @@
+{% extends "base.html" %} {% load static %} {% block nav %}
+<style>
+    .modal {
+        overflow-y: auto;
+    }
+    .modal-backdrop
+    {
+        opacity:0 !important;
+        transition:opacity .2s;
+    }
+    .modal-backdrop.in{
+  opacity:.7;
+}
+</style>
+
+<!--Start div hide/show container-->
+
+<div id='show-modal' class='so_reg'>
+    <nav class="navbar navbar-expand-lg navbar-light ">
+        <a class="navbar-brand" href="https://academycultureambassadors.com"><img src="{% static 'assets/images/one_line_wellbeing_pledges.jpg'%}" alt="" width="275px" height="47px" class="img-fluid"></a>
+
+
+        <div class="collapse navbar-collapse show" id="navbarSupportedContent">
+            <ul class="navbar-nav m-auto">
+                <h1>
+                     {% block title %}<img src="{% static 'assets/images/com_icon.jpg' %}" alt="" width="40px" class="img-fluid"> Wellbiing Pledge ©{% endblock %}
+
+                </h1>
+            </ul>
+
+            {% if user.get_username %}
+
+            <div class=" my-2 my-lg-0 content-right">
+                <div class="user-profile">
+                    <div class="d-inline-block">
+                        
+                        <h5>Hello, {{ user.first_name }}</h5>
+                        <a href="/logout" id='logout'>Logout </a><br/>
+                        <div><small class='alert-message'><b>When finished, logout and close browser link.</b></small></div>
+                        <div><small class='alert-option'><b>Click Photo for Personal Options.</b></small></div>
+                    </div>
+
+                    <div class="img-container ">
+                        <a href="/profile" id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">
+                         
+                         {% if user.profiles.profile_picture != '' %}
+                                <img src="/media/{{user.profiles.profile_picture}}" alt="">
+                            {% elif user.profile.profile_picture != ''%}
+                            
+                                <img src="/media/{{user.profile.profile_picture}}" alt="">
+                            {% else %}
+                                <img src="/media/profilepic/default-user.png" alt="">
+                            {% endif %}
+                        </a>
+                        
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="dropdownMenuReference">
+                            <a class="dropdown-item">CLICK ONE TO </a>
+                            <a class="dropdown-item" href="/profile">Add or Edit Photo</a>
+                            <a class="dropdown-item" href="/password_change">Change password</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+
+
+            <div class=" my-2 my-lg-0">
+                <div class="user-profile">
+                    <div class="d-inline-block">
+                        {% if "login" in request.path and is_signup %}
+                        <a data-toggle="modal" href="#addRegistration" class="open-AddDialog">Sign Up</a> 
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+    </nav>
+    <!-- sign up dialog -->
+    <div class="modal hide" id="addRegistration">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Team member Sign In</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                   
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/wellbeing/registration/?next={{request.GET.next}}" enctype="multipart/form-data">
+                        {% csrf_token %} 
+                        {% for field in registrationform %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for=''>{{ field.label_tag }}</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    {{ field }}
+                                    <span class="input-group-addon"></span> {% for error in field.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr> {% endfor %}
+                        {% comment %} <input type='text' value='' name='ip_address' id='ip_address'/> {% endcomment %}
+                          {% comment %} <br/><strong style='color:red;'>It might take a little while to download a photo. Watch for it to appear
+                                in upper right hand corner.</strong> {% endcomment %}
+                        <div style='margin-top:-20%;'>
+                        <strong style='color:red;text-align:justify;'><i>REMEMBER THE EMAIL AND PASSWORD YOU ARE USING.  
+                        IF YOU FORGET THE PASSWORD WE CAN’T RECOVER IT AND YOU CAN’T LOGIN USING THE  SAME EMAIL.</i></strong>
+                        <br/><br/><strong style='color:red;'>Password Hint.</strong>
+                        
+                        <br/>* Your password must contain at least 8 characters.
+                        
+                        <br/>* Your password can't be entirely numeric.
+                         <br/>* Your password is case sensitive.
+                         </div>
+                         <div class="agree-sec m-0">
+                            <div class="btn-container text-center ml-auto ">
+                                {% comment %} <strong style='color:red;'>Remember to add your photo.</strong> {% endcomment %}
+                                
+                                <button type="submit" class="btn btn-default text-uppercase button-all">register</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {% endblock nav %} {% block content %} {% endblock content %} {% block footer %}
+    <div class="copy-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 p-0">
+                    <div class="copy-content">
+                        <p>© {% now "Y" %} Academy of Culture Ambassadors LLC</p>
+                        <a href="#">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- End div hide/show container -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModal2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    SESSION ORIGINATOR
+                </div>
+                <div class="modal-body">
+                    <input type='hidden' name='ip_address' id='ip_address' value=''/>
+                    <div class='row' style='margin-top:10px;'>
+                        <input type='radio' name='so' value='register' id='reg1' style='margin-left:10px;' /><span style='padding-left:5px;color:red;'>I have already registered for this company.</span>
+                    </div>
+                    <div class='row' style='margin-top:10px;'>
+
+                        <input type='radio' name='so' value='notregister' id='reg2' style='margin-left:10px;' /><span style='padding-left:5px;color:red;'>I have not yet registered for this company.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js'></script> {% endcomment %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    {% comment %} <script src="{% static 'assets/js/bootstrap2.min.js'%}"></script> {% endcomment %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('close-signup').onclick = function(){
+        var reg = document.getElementById('addRegistration');
+        reg.style.display = 'none';
+        };
+    </script>
+<script>
+$.get("https://ipinfo.io", function (response) {
+   // $("#ip_address").val(response.ip);
+    $("#id_ip_address").val(response.ip);
+    
+
+}, "jsonp");
+
+</script>
+
+<script>
+
+var path = window.location.href.split('/');
+if(path[3] == 'registration' && path[5] == ''){
+    $('.so_reg').css('display','none')
+    $('#myModal2').modal({backdrop: 'static',keyboard: false,show: true });
+
+}
+$('input[name="so"]').change(function() {
+    if ($(this).is(':checked') && $(this).val() == 'register') {
+        window.location.href = '/login/';
+        
+    }
+    else if ($(this).is(':checked') && $(this).val() == 'notregister') {
+        $('#myModal2').modal('hide');
+        $('.so_reg').css('display','block');
+        window.location.href = window.location.href+'#';
+        window.location.reload();
+    }
+});
+
+if (!Object.keys) {
+  Object.keys = function(obj) {
+    var keys = [];
+
+    for (var i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        keys.push(i);
+      }
+    }
+
+    return keys;
+  };
+}
+
+</script>
+    {% endblock footer %} {% block scripts %} {% endblock scripts %}

@@ -1,0 +1,146 @@
+{% extends "container.html" %}
+{% load staticfiles %}
+{% block title %}<img src="{% static 'assets/images/com_icon.jpg' %}" alt="" width="40px" class="img-fluid"> {{title}}{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<style>
+.companies-name{
+    text-transform:none;
+}
+</style>
+
+<section class="main-section" style="overflow-y: scroll;">
+    <div class="d-flex justify-content-center"><img src="{{logo.url}}"></div>
+    <div class="btn-container text-center" style='margin:0%;'>
+        {% if not request.user.is_staff %}
+        <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Add We're Proud</a><br>
+        {% endif %}
+    </div>
+    <div class="btn-container" style='margin:2%0%2%0%;'>
+        {% for data in proud %}
+        <div class="row">
+            <div class="col-sm-2" style="text-align: center;">
+                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:80px; width: 80px"><br>
+                {{data.created_by.first_name}}
+            </div>
+            <div class="col-sm-9">
+            {% for pillar in data.pillars.all %}
+                {{pillar}}
+                {% if not  forloop.last %}
+                ,
+                {% endif %}
+            {% endfor %}
+            : {{data.proud_text}}
+            </div><br><br>
+        </div><br><br>
+        {% endfor %}
+        
+    </div>
+    <!-- Add/Create Modal View -->
+    <div class="modal hide" id="addProud">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Proud form</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <form method="post" action="/proud/" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <label for="{{ pillar }}">Choose a Piller:</label>
+                            <select class="selectpicker" multiple name="pillar" data-live-search="true" required>
+                                {% for pillar in company_pillar %}
+                                <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
+                                {% endfor %}
+                            </select>
+                            
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        {{ form.proud_text|as_crispy_field }}
+                                        <span class="input-group-addon"></span>
+                                        {% for error in field.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="agree-sec m-0">
+                                <div class="btn-container text-center ml-auto ">
+                                    <button type="submit" class="btn btn-default text-uppercase">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div> 
+</section>
+{% endblock content %}
+{% block scripts %}
+
+   {% comment %} <!-- NEW ADDED SCRIPT -->
+    <script src="{% static 'assets/js/jquery-3.1.1.min.js' %}"></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js'></script>
+    <!-- END -->  {% endcomment %}
+    
+
+ <script src="{% static 'assets/js/jquery.dataTables.min.js'%}"></script>
+ <script src="{% static 'assets/js/dataTables.bootstrap4.min.js'%}"></script>
+ <script>
+    function editpopup(data_id)
+    {   
+        $('#editPledgeModal').modal('show');
+
+
+        $.ajax({
+            type:'GET',
+            url:'/edit_wellbeing_pledge/'+data_id,
+            success:function(data){
+                $('#edit_wellbeing_pledge').html(data)
+            }
+
+        })
+    }
+    getPledgeText();
+</script>
+<script>
+    function editcommentpopup(comment_id)
+    {   
+        $('#editCommentModal').modal('show');
+
+
+        $.ajax({
+            type:'GET',
+            url:'/edit_comment/'+comment_id,
+            success:function(data){
+                $('#edit_comment').html(data)
+            }
+
+        })
+    }
+    getPledgeText();
+</script>
+<script>
+    function commentpopup(pledge_id)
+    {   
+        $('#addComment').modal('show');
+        $('#pledge_id').val(pledge_id);
+    }
+    getPledgeText();
+</script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script>
+$('select').selectpicker();
+</script>
+{% endblock scripts %}

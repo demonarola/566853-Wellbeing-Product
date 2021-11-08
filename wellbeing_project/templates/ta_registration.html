@@ -1,0 +1,68 @@
+{% extends 'container.html' %}
+{% block content %}
+
+<section class="main-section center-section w-small">
+    <div class=" contents ">
+
+        <div class="right-section m-0" >
+            <div>
+                
+                {% if title %}
+                <h2 class="p-20 m-0 text-uppercase">{{title}}</h2>
+                {% else %}
+                <h2 class="p-20 m-0 text-uppercase">Registration</h2>
+
+                {% endif %}
+                
+                <hr class="m-0">
+                <div class="p-20">
+                    <form method="post" enctype="multipart/form-data" action='' autocomplete="off">
+                        {% csrf_token %}
+                     
+                        {% for field in form %}
+         
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for=''>{{ field.label_tag }}</label>
+                                </div>
+                                <div class="col-sm-8">
+
+                                    {{ field }}
+                                    <span class="input-group-addon"></span>
+                                    {% for error in field.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                        <strong style='color:red;text-align:justify;'>
+                        If you have already registered as a session originator for this company link, then click SIGN IN. If not
+                        already registered, click REGISTER.
+                        <br/>
+                        </strong>
+                        <strong style='color:red;'>Password Hint.</strong>
+                      
+                        <br/>* Your password must contain at least 8 characters.
+                       
+                        <br/>* Your password can't be entirely numeric.
+                         <br/>* Your password is case sensitive.
+                        <div class="agree-sec m-0">
+                            <div class="btn-container text-center ml-auto ">
+                            {% comment %} <strong style='color:red;' >Remember to add your photo.</strong> {% endcomment %}
+                                <button type="submit" class="btn btn-default text-uppercase button-all">Register</button>
+                                {% comment %} <a href="/login" class="btn btn-default text-uppercase button-all" style='margin-right:1%'>Already Registered for this Company Link </a> {% endcomment %}
+
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

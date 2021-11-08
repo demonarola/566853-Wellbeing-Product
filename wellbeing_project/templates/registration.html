@@ -1,0 +1,79 @@
+{% extends 'container.html' %}
+{% block content %}
+
+<section class="main-section center-section w-small">
+    <div class=" contents ">
+
+        <div class="right-section m-0" >
+            <div>
+                
+                {% if title %}
+                <h2 class="p-20 m-0 text-uppercase">{{title}}</h2>
+                {% else %}
+                <h2 class="p-20 m-0 text-uppercase">Registration </h2>
+
+                {% endif %}
+                    
+                <hr class="m-0">
+                <div class="p-20">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                
+                
+                        {% for field in form %}
+                       
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for=''>{{ field.label_tag }}</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    
+                                    {{ field }}
+                                    <span class="input-group-addon"></span>
+                                    {% for error in field.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                        {% comment %} <input type='hidden' value='' name='ip_address' id='ip_address'/> {% endcomment %}
+                        <div>
+                            <strong style='color:red;text-align:justify;'>REMEMBER THE EMAIL AND PASSWORD YOU ARE USING.  
+                        IF YOU FORGET THE PASSWORD WE CAN’T RECOVER IT AND YOU CAN’T LOGIN USING THE  SAME EMAIL.</strong>
+                        <br/><br/> <strong style='color:red;'>Password Hint.</strong>
+                            <br/>* Your password must contain at least 8 characters.
+                            <br/>* Your password can't be entirely numeric.
+                            <br/>* Your password is case sensitive.
+                        </div>
+                         <div class="agree-sec m-0">
+                            <div class="btn-container text-center ml-auto ">
+                                {% comment %} <strong style='color:red;'>Remember to add your photo.</strong> {% endcomment %}
+                                <button type="submit" class="btn btn-default text-uppercase button-all">register</button>
+                                {% comment %} <button type="button" onclick='goto_signin()' class="btn btn-default text-uppercase button-all">Sign In</button> {% endcomment %}
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+$.get("https://ipinfo.io", function (response) {
+      $("#ip_address").val(response.ip);
+    $("#id_ip_address").val(response.ip);
+
+}, "jsonp");
+</script>
+<script>
+
+function goto_signin(){
+var url = window.location.href.split('/')
+window.location.href = 'https://'+url[2]+'/'+url[6]+'/custom/';
+}
+</script>
+{% endblock content %}

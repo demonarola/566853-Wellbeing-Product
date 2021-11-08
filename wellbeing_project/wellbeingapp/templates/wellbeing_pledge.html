@@ -1,0 +1,332 @@
+{% extends "container.html" %}
+{% load staticfiles %}
+{% block title %}<img src="{% static 'assets/images/com_icon.jpg' %}" alt="" width="40px" class="img-fluid"> {{title}}{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+.companies-name{
+    text-transform:none;
+}
+</style>
+
+<section class="main-section" style="overflow-y: scroll;">
+    <div class="d-flex justify-content-center"><img src="{{logo.url}}"></div>
+    
+    <div class="btn-container text-center" style='margin:0%;'>
+        
+        {% if request.user.is_staff %}
+        <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
+        {% else %}
+        <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Add Proud</a>
+        <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
+        {% endif %}
+    </div>
+    <br>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="d-flex justify-content-center">
+        <div class="alert alert-success " style="width:400px;text-align: center;" role="alert">
+            {{ message }}
+        </div>   
+        </div>
+    {% endfor %}
+    <div class="btn-container" style='margin:2%0%2%0%;'>
+    
+    {% endif %} 
+    {% if not request.user.is_staff %}
+        {% for data in pledge %}
+        <div class="row">
+            <div class="col-sm-1">
+                
+                {% if not request.user.is_staff %}
+                <button type="button" class="btn btn-default" data-toggle="modal"  onclick = 'commentpopup("{{data.id}}")'>
+                    Comment
+                </button>
+                {% endif %}
+            </div>
+            <div class="col-sm-11">
+                <table style="font-weight: 000; color: black !important;">
+                    <tr>
+                        <td><img src="/media/{{data.person_photo}}" style="height:80px; width: 80px"></td>
+                        <td>&nbsp;&nbsp;{{data.person_name}}</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            {% for pillar in data.pillars.all %}
+                            
+                                {{pillar}}
+                                {% if not  forloop.last %}
+                                ,
+                                {% endif %}
+                            {% endfor %}
+                            : {{data.pledge_text}}
+                        </td>
+                    </tr>
+                </table><br>
+                <div class="btn-container text-right">
+                    {% if request.user.is_staff %}
+                    <button type="button" class="btn btn-default" data-toggle="modal"  onclick = 'editpopup("{{data.id}}")'>
+                        Edit Pledge
+                    </button>
+                    {% endif %}
+                </div><br>
+                
+                <div class="container ">
+                    {% for comment in pledge_comments %}
+                        {% if data.id == comment.pledge.id%}
+                        <div class="row">
+                            <div class="col-sm-2" style="text-align: center;">
+                                <img src="/media/{{comment.created_by.profile.profile_picture}}" class="rounded mx-auto d-block" style="height:80px; width: 80px;">
+                                {{comment.created_by}}
+                            </div>
+                            <div class="col-sm-8">
+                                {{comment.comment}}
+                            </div>
+                            {% if not request.user.is_staff %}
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-default" data-toggle="modal"  onclick = 'editcommentpopup("{{comment.id}}")'>
+                                    <i class="material-icons">edit</i>
+                                </button>
+                            </div>
+                            <div class="col-sm-1">
+                                <a class="btn btn-default" href="{% url 'delete_pledge_comment' comment.id %}">
+                                    <i class="material-icons">delete</i>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div><br>
+                        {% endif %}
+                    {% endfor %}                        
+                </div>
+            </div>
+        </div>   
+        {% endfor %}
+    {% endif %}
+    </div>
+    <!-- Project Manager Add/Create pledge Modal View -->
+    <div class="modal hide" id="addPledge">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Pledge</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <form method="post" action="/wellbeing_pledge/" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="{{ pillar }}">Choose a Piller:</label>
+                            <select class="selectpicker" multiple name="pillar" data-live-search="true" required>
+                                {% for pillar in company_pillar %}
+                                <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="form-group col-md-12 mb-0">
+                                        {{ form.pledge_text|as_crispy_field }}
+                                    </div>
+                                    <div class="form-group col-md-12 mb-0">
+                                        {{ form.person_name|as_crispy_field }}
+                                      </div>
+                                      <div class="form-group col-md-12 mb-0">
+                                        {{ form.person_photo|as_crispy_field }}
+                                      </div>
+                                        <span class="input-group-addon"></span>
+                                        {% for error in field.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            <hr>
+                            
+                            <div class="agree-sec m-0">
+                                <div class="btn-container text-center ml-auto ">
+                                    <button type="submit" id="b3" class="btn btn-default text-uppercase">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                       
+                </div>
+            </div>
+        </div>
+    </div> 
+    <!-- User Add/Create Pledge Modal View -->
+    <div class="modal hide" id="addUserPledge">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Pledge</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <form method="post" action="/user_pledge/" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% for field in user_pledge_form %}
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        {{ field|as_crispy_field }}
+                                        <span class="input-group-addon"></span>
+                                        {% for error in field.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            {% endfor %}
+                            <div class="agree-sec m-0">
+                                <div class="btn-container text-center ml-auto ">
+                                    <button type="submit" class="btn btn-default text-uppercase">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit/Update Project Manager Pledge Modal View -->
+    <div class="modal hide" id="editPledgeModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Pledge</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body" id='edit_wellbeing_pledge'>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit/Update Comment Modal View -->
+    <div class="modal hide" id="editCommentModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Comment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body" id='edit_comment'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Comment to pledge -->
+    <div class="modal hide" id="addComment">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Comment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/pledge_comment/" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in comment_form %}
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <input type="hidden" id="pledge_id" name="pledge_id"><br>
+                                    {{ field|as_crispy_field }}
+                                    <span class="input-group-addon"></span>
+                                    {% for error in field.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+
+                        {% endfor %}
+                        <div class="agree-sec m-0">
+                            <div class="btn-container text-center ml-auto ">
+                                <button type="submit" class="btn btn-default text-uppercase">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> 
+</section>
+{% endblock content %}
+{% block scripts %}
+
+   {% comment %} <!-- NEW ADDED SCRIPT -->
+    <script src="{% static 'assets/js/jquery-3.1.1.min.js' %}"></script>
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js'></script>
+    <!-- END -->  {% endcomment %}
+    
+
+ <script src="{% static 'assets/js/jquery.dataTables.min.js'%}"></script>
+ <script src="{% static 'assets/js/dataTables.bootstrap4.min.js'%}"></script>
+ <script>
+    function editpopup(data_id)
+    {   
+        $('#editPledgeModal').modal('show');
+
+
+        $.ajax({
+            type:'GET',
+            url:'/edit_wellbeing_pledge/'+data_id,
+            success:function(data){
+                $('#edit_wellbeing_pledge').html(data)
+            }
+
+        })
+    }
+
+</script>
+<script>
+    function editcommentpopup(comment_id)
+    {   
+        $('#editCommentModal').modal('show');
+
+
+        $.ajax({
+            type:'GET',
+            url:'/edit_comment/'+comment_id,
+            success:function(data){
+                $('#edit_comment').html(data)
+            }
+
+        })
+    }
+    
+</script>
+<script>
+    function commentpopup(pledge_id)
+    {   
+        $('#addComment').modal('show');
+        $('#pledge_id').val(pledge_id);
+    }
+  
+</script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script>
+$('select').selectpicker();
+
+</script>
+{% endblock scripts %}

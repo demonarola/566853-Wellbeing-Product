@@ -1,0 +1,10 @@
+{% extends "container.html" %}
+
+{% block content %}
+<h2>Domains</h2>
+<ul>
+    {% for domains in object_list %}
+    <li>{{ domains.domain }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

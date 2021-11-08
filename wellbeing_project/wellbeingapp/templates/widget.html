@@ -1,0 +1,123 @@
+{% load staticfiles %}
+<style>
+#progress {
+  display: block;
+  width:310px;
+}
+#imageUpload{
+  display:none;
+}
+#progress .bar {
+  height: 24px;
+  width: 0%;
+  background: lightblue;
+  text-align: center;
+}
+.browse-image{
+      border: 1px solid #118c66;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color:#118c66;
+    float:right;
+}
+.photo-label{
+  color:white;
+}
+</style>
+{% comment %} <div class="avatar-upload">
+    <div class="avatar-edit">
+        <input type='file' id="imageUpload" name="{{widget.name}}" accept="image/*" />
+        <label for="imageUpload"></label>
+         
+    </div>
+    <div class="avatar-preview">
+        <div id="imagePreview">
+        </div>
+    </div>
+     <p id="upload-status"></p>
+    
+    <div id="progress">
+        <div class="bar"></div>
+    </div>
+</div>
+<b style='color:red'>Click the pencil to add your photo from your computer.</b>
+ {% endcomment %}
+    
+ <span id='imagename'></span>
+{% comment %} <label for="imageUpload" class="browse-image">
+
+     <span class='photo-label'>
+     Add Photo
+     </span>
+</label> {% endcomment %}
+ <input type='file' id="imageUpload" name="{{widget.name}}" accept="image/*" />
+{% comment %} 
+<script src="{% static 'assets/js/jquery.fileupload.min.js'%}"></script> {% endcomment %}
+
+
+
+{% block scripts %}
+ <script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            if(Math.round(input.files[0].size/(1024*1024)) > 1){
+              alert("File is too big! please choose file less than 1 Mb");
+              
+            }
+            else{
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                
+                  $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+                  $('#imagePreview').hide();
+                  $('#imagePreview').fadeIn(650);
+                  $('#imageUpload').attr('value', e.target.result);
+                  $('#imagename').text(input.files[0].name)
+              }
+
+            reader.readAsDataURL(input.files[0]);
+            }
+        }
+    }
+    $("#imageUpload").change(function () {
+        
+        readURL(this);
+
+    });
+</script>
+
+{% comment %} <script src="{% static 'assets/js/jquery.fileupload.min.js'%}"></script> {% endcomment %}
+
+ <script>
+ (function() {
+  'use strict';
+  
+  $('#imageupload').fileupload({
+    
+    add: function (e, data) {
+      $('#upload-status').text("Uploading...");
+      setProgressBar(0);
+      data.submit();
+    },
+    progressall: function (e, data) {
+      setProgressBar(parseInt(data.loaded / data.total * 100, 10));
+    },
+    done: function (e, data) {
+      $('#upload-status').text("Uploading Complete!");
+    }
+  });
+  
+  function setProgressBar(percentage) {
+    $('#progress .bar').css(
+      'width',
+      percentage + '%'
+    ).text(percentage + '%');
+  }
+
+}).call(this); 
+
+
+
+</script> 
+{% endblock scripts %}
