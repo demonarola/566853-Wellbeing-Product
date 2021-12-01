@@ -12,7 +12,7 @@ django-utils-six==2.0
 djangorestframework==3.12.4
 idna==3.3
 mammoth==1.4.17
-numpy-1.19.5
+numpy==1.19.5
 ordered-set==4.0.2
 Pillow==8.3.2
 psycopg2==2.9.1
