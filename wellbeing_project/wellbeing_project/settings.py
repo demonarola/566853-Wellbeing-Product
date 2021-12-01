@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Main domain url to access application
-MAIN_DOMAIN = "075c-123-201-110-196.ngrok.io"
+MAIN_DOMAIN = "greenpiggroup.com"
 MAIN_IP = "127.0.0.1"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -114,10 +114,10 @@ WSGI_APPLICATION = "wellbeing_project.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django_tenants.postgresql_backend",
-        "NAME": "",
-        "USER": "",
+        "NAME": "wellbeing",
+        "USER": "postgres",
         # "HOST": "db",
-        "PASSWORD":'password',
+        # "PASSWORD":'password',
         "PORT": "5432",
     }
 }
@@ -154,10 +154,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
