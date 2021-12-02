@@ -10,7 +10,7 @@
         <div class="right-section m-0 sign-in " data-simplebar>
             <div>
                 {% comment %} <h2 class="p-20 m-0 text-uppercase" id='ta_title'>{{title}}</h2> {% endcomment %}
-                <h2 class="p-20 m-0 text-uppercase" id='ta_title'></h2>
+                <h2 class="p-20 m-0 text-uppercase" id='ta_title'>COMPANY REGISTRATION</h2>
                 <hr class="m-0">
                 <div class="p-20">               
                     <form method="post" action=''>
@@ -144,7 +144,7 @@
             {   var path = window.location.href.split('/');
                
             var survey_id = ''
-                if(path[5] != undefined){
+                /*if(path[5] != undefined){
                     survey_id = path[5]
                 }
                 if (path[3] == 'login' && path[6]=='custom' && path[7] == '') {
@@ -160,7 +160,7 @@
                 else{
                     $('#ta_title').text('TEAM MEMBER SIGN IN');
 
-                }
+                }*/
                 
                 $('input[name="reg"]').change(function() {
                     var ip_address = $('#ip_address').val();
