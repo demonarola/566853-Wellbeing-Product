@@ -11,7 +11,7 @@
 </style>
 
 <section class="main-section" style="overflow-y: scroll;">
-    <div class="d-flex justify-content-center"><img src="{{logo.url}}"></div>
+    <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" width="300px"></div>
     <div class="btn-container text-center" style='margin:0%;'>
         {% if not request.user.is_staff %}
         <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Add We're Proud</a><br>
