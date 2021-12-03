@@ -70,7 +70,7 @@ class TeamAdminRegistrationView(APIView):
     template_name = "ta_registration.html"
     form_class = TeamAdminRegistrationForm
 
-    title = "session originator"
+    title = "USER REGISTRATION"
 
     def get(self, request, random_url):
         """ render registration template """
@@ -172,7 +172,7 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
             for pillar_obj in pillar_text:
                 pledge.pillars.add(pillar_obj)
             pledge.save()
-            messages.success(request, 'Pledge Create successfully!')
+            messages.success(request, 'Pledge Created successfully!')
             return HttpResponseRedirect('/wellbeing_pledge')
 
 class EditWellbeingPledgeView(LoginRequiredMixin,APIView):
