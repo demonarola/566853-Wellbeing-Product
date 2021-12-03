@@ -17,7 +17,7 @@
         {% if request.user.is_staff %}
         <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
         {% else %}
-        <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Add Proud</a>
+        <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Add We’re Proud</a>
         <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
         {% endif %}
     </div>
@@ -119,12 +119,29 @@
                 <div class="modal-body">
                         <form method="post" action="/wellbeing_pledge/" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <label for="{{ pillar }}">Choose a Piller:</label>
-                            <select class="selectpicker" multiple name="pillar" data-live-search="true" required>
-                                {% for pillar in company_pillar %}
-                                <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
-                                {% endfor %}
-                            </select>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="{{ pillar }}">Choose a Piller:</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="row d-flex justify-content-center mt-100">
+                                    <div class="col-md-12">
+                                    <select id="choices-multiple-remove-button" placeholder="Choose Piller" multiple name="pillar" data-live-search="true" required>
+                                        {% for pillar in company_pillar %}
+                                        <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    </div>
+                                </div><br>
+                            </div>
+                            
+                            
+                             
+                                 
+                            
+                        </div>
+
+
                             <div class="form-group">
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-0">
@@ -319,14 +336,22 @@
         $('#pledge_id').val(pledge_id);
     }
   
-</script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-<script>
-$('select').selectpicker();
+
 
 </script>
+<!-- multiselect dropdown -->
+<script>
+$(document).ready(function(){
+
+var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+    removeItemButton: true,
+    //maxItemCount:5,
+    //searchResultLimit:5,
+    //renderChoiceLimit:5
+    });
+});
+</script>
+
+
+
 {% endblock scripts %}

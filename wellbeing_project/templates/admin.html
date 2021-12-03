@@ -1,6 +1,7 @@
 {% extends "container.html" %}
 {% load staticfiles %}
 {% block title %}<img src="{% static 'assets/images/com_icon.jpg' %}" alt="" width="40px" class="img-fluid"> {{title}}{% endblock %}
+{% load crispy_forms_tags %}
 {% block content %}
 
 <style>
@@ -107,25 +108,57 @@
                     <div class="modal-body">
                             <form method="post" action="/registration/" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                {% for field in form %}
+
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for=''>{{ field.label_tag }}</label>
+                                        <div class="col-md-4 mb-0">
+                                            <label for=''>{{ form.domain.label }}</label>
                                         </div>
-                                        <div class="col-sm-8">
-        
-                                            {{ field }}
-                                            <span class="input-group-addon"></span>
-                                            {% for error in field.errors %}
-                                            <p style="color: red">{{ error }}</p>
-                                            {% endfor %}
+                                        <div class="col-md-8 mb-0">
+                                            {{ form.domain }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-0">
+                                            <label for=''>{{ form.company_name.label }}</label>
+                                        </div>
+                                        <div class="col-md-8 mb-0">
+                                            {{ form.company_name }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-0">
+                                            <label for=''>{{ form.project_manager_email.label }}</label>
+                                        </div>
+                                        <div class="col-md-8 mb-0">
+                                            {{ form.project_manager_email }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-0">
+                                            <label for=''>{{ form.company_logo.label }}</label>
+                                        </div>
+                                        <div class="col-md-8 mb-0">
+                                            {{ form.company_logo }}
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-0">
+                                            <label for=''>{{ form.pillar.label }}</label><br>
+                                            <div class="row">
+                                                <p style="color:red; margin;margin-left: 10px;">
+                                                    ( Add Pillars one at a time on separate lines. )
+                                                </p>  
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 mb-0">
+                                            {{ form.pillar }}
                                         </div>
                                     </div>
+                                    
                                 </div>
                                 <hr>
         
-                                {% endfor %}
                                 <div class="agree-sec m-0">
                                     <div class="btn-container text-center ml-auto ">
                                         <button type="submit" class="btn btn-default text-uppercase">register</button>
