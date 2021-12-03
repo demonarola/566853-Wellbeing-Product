@@ -75,9 +75,12 @@ class TeamAdminRegistrationView(APIView):
     def get(self, request, random_url):
         """ render registration template """
         return Response({'form': self.form_class,"title":self.title})
-        
-    def post(self, request, random_url):
-        """ save team admin data """
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
         url = request.get_host().split(':')[0]
         dom = Domain.objects.get(domain=url).tenant_id
         form = self.form_class(request.POST,request.FILES)

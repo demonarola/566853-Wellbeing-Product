@@ -391,11 +391,17 @@ class TeamAdminRegistrationForm(UserCreationForm):
         instance.is_staff = True
         if commit:
             instance.save()
-           
-            profile_object = UserProfile.objects.create(
-                **{"user": instance, "profile_picture": cd.get("profile_picture","profilepic/default-user.png")}
-            )
-            profile_object.save()
+            if  cd.get("profile_picture") != None:
+                profile_object = UserProfile.objects.create(
+                    **{"user": instance, "profile_picture": cd.get("profile_picture","profilepic/default-user.png")}
+                )
+                profile_object.save()
+            else:
+                profile_object = UserProfile.objects.create(
+                    **{"user": instance, "profile_picture": "profilepic/default-user.png"}
+                )
+                profile_object.save()
+
         return instance
 
 class AddPledgeForm(forms.ModelForm):
