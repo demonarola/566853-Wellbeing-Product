@@ -39,13 +39,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from wellbeingapp.serializers import *
 
-import logging
 
-DATE_FORMAT = '%a, %d %b %Y %H:%M:%S'
-LOG_FILE = 'log'
-RESULT_LOG_FILE = 'mail_issue.log'
-LOG_FORMAT = '[%(asctime)s] [%(filename)s:%(lineno)d] [%(levelname)s] [%(threadName)s] [%(process)d] %(message)s'
-logging.basicConfig(filename=RESULT_LOG_FILE) 
 
 class EmailLoginView(auth_view.LoginView):
     """ Login View """
@@ -301,17 +295,17 @@ class UserPledgeView(LoginRequiredMixin,APIView):
         """ Save comment """
         user_pledge_form = UserPledgeForm(request.POST)
         url = request.get_host().split(':')[0]
-        dom = Domain.objects.get(domain=url).tenant_id
-        company_id = Client.objects.get(id=dom)
+        dom = Domain.objects.get(domain=url)
+        company_id = Client.objects.get(id=dom.tenant_id)
         connection.set_tenant(company_id)
-        print(company_id.project_manager_email)
+        print(dom.domain)
         if user_pledge_form.is_valid():
             user_pledge_form = user_pledge_form.save(commit=False)
             user_pledge_form.created_by = get_object_or_404(User, pk=request.user.id)
-            # user_pledge_form.save()
+            user_pledge_form.save()
             subject = render_to_string('email/confirmation_email_subject.txt')
 
-            body = render_to_string('email/confirmation_email_body.html',{'pledge_text': user_pledge_form.pledge_text, 'user':user_pledge_form.created_by})
+            body = render_to_string('email/confirmation_email_body.html',{'pledge_text': user_pledge_form.pledge_text, 'user':user_pledge_form.created_by, 'dom':dom.domain})
     
             recipients = [company_id.project_manager_email]
             # recipients = ["avh@narola.email"]
@@ -325,7 +319,6 @@ class UserPledgeView(LoginRequiredMixin,APIView):
                 )
             except Exception as e:
                 print("Error ===",e)
-                logging.exception('campspots_error'+str(e))
         return HttpResponseRedirect('/wellbeing_pledge')
 
 class ProfileView(LoginRequiredMixin, APIView):
