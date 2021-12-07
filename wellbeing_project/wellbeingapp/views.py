@@ -39,6 +39,14 @@ from django.core.mail import send_mail
 from django.conf import settings
 from wellbeingapp.serializers import *
 
+import logging
+
+DATE_FORMAT = '%a, %d %b %Y %H:%M:%S'
+LOG_FILE = 'log'
+RESULT_LOG_FILE = 'mail_issue.log'
+LOG_FORMAT = '[%(asctime)s] [%(filename)s:%(lineno)d] [%(levelname)s] [%(threadName)s] [%(process)d] %(message)s'
+logging.basicConfig(filename=RESULT_LOG_FILE) 
+
 class EmailLoginView(auth_view.LoginView):
     """ Login View """
     form_class = EmailAuthenticationForm
@@ -317,6 +325,7 @@ class UserPledgeView(LoginRequiredMixin,APIView):
                 )
             except Exception as e:
                 print("Error ===",e)
+                logging.exception('campspots_error'+str(e))
         return HttpResponseRedirect('/wellbeing_pledge')
 
 class ProfileView(LoginRequiredMixin, APIView):

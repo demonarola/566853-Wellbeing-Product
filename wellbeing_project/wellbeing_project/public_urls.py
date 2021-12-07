@@ -54,6 +54,7 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("registration/", SignUpView.as_view(), name="registration"),
+    # path('session_info/<company_id>',SessionInfo.as_view(),name='session_info'),
     path("registration/list/", RegistrationListView.as_view(), name="registration-list"),
     path("registration/delete/<int:pk>/",company_delete_view,name="registration-delete"),
     path("profile/",ProfileView.as_view(),name="profile"),
