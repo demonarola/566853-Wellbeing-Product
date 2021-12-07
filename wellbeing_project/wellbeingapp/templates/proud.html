@@ -14,7 +14,7 @@
     <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" width="300px"></div>
     <div class="btn-container text-center" style='margin:0%;'>
         {% if not request.user.is_staff %}
-        <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Add We're Proud</a><br>
+        <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Kudo’s</a><br>
         {% endif %}
     </div>
     <div class="btn-container" style='margin:2%0%2%0%;'>
@@ -43,7 +43,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Proud form</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Kudo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -52,8 +52,9 @@
                         <form method="post" action="/proud/" enctype="multipart/form-data">
                             {% csrf_token %}
                             
-                            <label for="{{ pillar }}">Choose a Piller:</label>
-                            <select class="selectpicker" multiple name="pillar" data-live-search="true" required>
+                            <label for="{{ pillar }}">Choose a Pillar:</label>
+                            {% comment %} <select class="selectpicker" multiple name="pillar" data-live-search="true" required> {% endcomment %}
+                            <select id="choices-multiple-remove-button" placeholder="" multiple name="pillar" data-live-search="true" required>
                                 {% for pillar in company_pillar %}
                                 <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
                                 {% endfor %}
@@ -135,12 +136,16 @@
     }
     getPledgeText();
 </script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<!-- multiselect dropdown -->
 <script>
-$('select').selectpicker();
+$(document).ready(function(){
+
+var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+    removeItemButton: true,
+    //maxItemCount:5,
+    //searchResultLimit:5,
+    //renderChoiceLimit:5
+    });
+});
 </script>
 {% endblock scripts %}

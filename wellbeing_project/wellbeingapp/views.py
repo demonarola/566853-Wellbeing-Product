@@ -150,7 +150,7 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
         form = AddPledgeForm()
         user_pledge_form = UserPledgeForm()
         comment_form = AddCommentForm()
-        pledge = PledgeDetail.objects.all()
+        pledge = PledgeDetail.objects.all().order_by('-id')
         pledge_comments = PledgeComment.objects.all()
         return Response({
                         "title":self.title,

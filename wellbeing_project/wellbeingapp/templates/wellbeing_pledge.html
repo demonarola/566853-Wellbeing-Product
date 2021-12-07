@@ -10,15 +10,19 @@
 </style>
 
 <section class="main-section" style="overflow-y: scroll;">
-    <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" width="300px"></div>
     
     <div class="btn-container text-center" style='margin:0%;'>
         
         {% if request.user.is_staff %}
+        <h3 class="text-center">Project Manager Landing Page</h3>
+        <div class="d-flex justify-content-center"><img src="{{logo.url}}" height:="300px" max-width="400px"></div>
+        {% comment %} <a data-toggle="modal" href=""class="open-AddDialog btn btn-default mt-3">User Landing Page</a> {% endcomment %}
         <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
         {% else %}
-        <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Add We’re Proud</a>
-        <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
+        <h3 class="text-center">User Landing Page</h3>
+        <div class="d-flex justify-content-center"><img src="{{logo.url}}" height:="300px" max-width="400px"></div>
+        <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Kudo’s</a>
+        <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a><br>
         {% endif %}
     </div>
     <br>
@@ -121,27 +125,20 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="{{ pillar }}">Choose a Piller:</label>
+                                    <label for="{{ pillar }}">Choose a Pillar:</label>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="row d-flex justify-content-center mt-100">
                                     <div class="col-md-12">
-                                    <select id="choices-multiple-remove-button" placeholder="Choose Piller" multiple name="pillar" data-live-search="true" required>
-                                        {% for pillar in company_pillar %}
-                                        <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
-                                        {% endfor %}
-                                    </select>
+                                        <select id="choices-multiple-remove-button" placeholder="" multiple name="pillar" data-live-search="true" required>
+                                            {% for pillar in company_pillar %}
+                                            <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div><br>
                             </div>
-                            
-                            
-                             
-                                 
-                            
                         </div>
-
-
                             <div class="form-group">
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-0">

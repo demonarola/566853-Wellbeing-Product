@@ -406,7 +406,7 @@ class TeamAdminRegistrationForm(UserCreationForm):
 
 class AddPledgeForm(forms.ModelForm):
     pledge_text = forms.CharField(required=True, widget=forms.Textarea(attrs={'rows':7,'placeholder': 'Enter pledge text'}))
-    person_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'cols':25,'placeholder': 'Enter person name'}))
+    person_name = forms.CharField(label=_('Contributors Name'),required=True, widget=forms.TextInput(attrs={'cols':25,'placeholder': 'Enter person name'}))
     person_photo = forms.ImageField(label=_('Person Photo'))
     class Meta:
         model = PledgeDetail
@@ -442,7 +442,7 @@ class AddCommentForm(forms.ModelForm):
         exclude = ['created_by','pledge']
 
 class AddProudForm(forms.ModelForm):
-    proud_text = forms.CharField(widget=forms.Textarea(attrs={'rows':8,'cols':25,'placeholder': 'Enter proud text'}))
+    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25,'placeholder': 'Enter proud text'}))
     class Meta:
         model = Proud
         fields = ['proud_text']
