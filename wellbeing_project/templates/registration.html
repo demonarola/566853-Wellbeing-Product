@@ -40,14 +40,14 @@
                         <hr>
                         {% endfor %}
                         {% comment %} <input type='hidden' value='' name='ip_address' id='ip_address'/> {% endcomment %}
-                        <div>
+                        {% comment %} <div>
                             <strong style='color:red;text-align:justify;'>REMEMBER THE EMAIL AND PASSWORD YOU ARE USING.  
                         IF YOU FORGET THE PASSWORD WE CAN’T RECOVER IT AND YOU CAN’T LOGIN USING THE  SAME EMAIL.</strong>
                         <br/><br/> <strong style='color:red;'>Password Hint.</strong>
                             <br/>* Your password must contain at least 8 characters.
                             <br/>* Your password can't be entirely numeric.
                             <br/>* Your password is case sensitive.
-                        </div>
+                        </div> {% endcomment %}
                          <div class="agree-sec m-0">
                             <div class="btn-container text-center ml-auto ">
                                 {% comment %} <strong style='color:red;'>Remember to add your photo.</strong> {% endcomment %}
@@ -75,5 +75,13 @@ function goto_signin(){
 var url = window.location.href.split('/')
 window.location.href = 'https://'+url[2]+'/'+url[6]+'/custom/';
 }
+</script>
+
+<script>
+"Hide the error message after upload company logo"
+
+$("#id_company_logo").change(function () {
+    $("#id_company_logo").next("").next("").hide();
+});
 </script>
 {% endblock content %}

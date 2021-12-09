@@ -36,8 +36,6 @@ class PasswordFieldWidget(PasswordInput):
         template = loader.get_template(self.template_name).render(context)
         return mark_safe(template)
 
-
-
 def get_user(email):
     try:
         return User.objects.get(email=email.lower()).username
