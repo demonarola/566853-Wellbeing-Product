@@ -8,7 +8,7 @@ from django.http import (
 )
 from rest_framework import generics, viewsets
 from customers.models import *
-
+from django.db import connection
 from customers.serializers import *
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -26,7 +26,7 @@ from django.views.generic import (
     DeleteView,
     TemplateView,
 )
-
+from wellbeingapp.models import *
 
 def error_403(request, exception=None):
     """ Display 403 Error page"""
@@ -99,8 +99,16 @@ def company_delete_view(request, pk):
     """ Delete Company/client by domain id """
     company = get_object_or_404(Domain, pk=pk)
     cascade_object = Client.objects.get(domains=company)
+    connection.set_tenant(cascade_object)
+    Domain.objects.filter(tenant_id=company.id).delete()
+    User.objects.all().delete()
+    PledgeDetail.objects.all().delete()
+    PledgeComment.objects.all().delete()
+    Proud.objects.all().delete()
+    UserPledge.objects.all().delete()
+    Pillar.objects.filter(client_id=cascade_object.id).delete()
     cascade_object._drop_schema(force_drop=True)
-    # cascade_object.delete()
+    cascade_object.delete()
     company.delete()
     return HttpResponseRedirect(reverse_lazy('super-admin'))
 
