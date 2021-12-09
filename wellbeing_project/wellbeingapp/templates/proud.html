@@ -11,31 +11,57 @@
 </style>
 
 <section class="main-section" style="overflow-y: scroll;">
-    <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" width="300px"></div>
-    <div class="btn-container text-center" style='margin:0%;'>
-        {% if not request.user.is_staff %}
-        <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Kudo’s</a><br>
-        {% endif %}
+    <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
+    <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
+        <h3>Kudo’s</h3>
     </div>
     <div class="btn-container" style='margin:2%0%2%0%;'>
         {% for data in proud %}
-        <div class="row">
-            <div class="col-sm-2" style="text-align: center;">
-                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:80px; width: 80px"><br>
-                {{data.created_by.first_name}}
-            </div>
-            <div class="col-sm-9">
+        <h4 class="text-center">
             {% for pillar in data.pillars.all %}
                 {{pillar}}
                 {% if not  forloop.last %}
                 ,
                 {% endif %}
             {% endfor %}
-            : {{data.proud_text}}
+        </h4>
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-2">
+                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:80px; width: 80px"><br>
+            </div>
+            <div class="col-sm-9">
+                From: {{data.created_by.first_name}}
+                <div class="row">
+                    <div class="col-sm-12">
+                    To: {{data.to}}
+                    </div>
+                </div>
             </div><br><br>
-        </div><br><br>
-        {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+                {{data.proud_text}}&nbsp;
+                {% if not request.user.is_staff %}
+                <a style="color:#118c66" data-toggle="editProudModal" onclick = 'editproudpopup("{{data.id}}")'><i class="material-icons">edit</i></a>
+                <a href="{% url 'delete_proud' data.id %} " style="color:#118c66"><i class="material-icons">delete</i></a>    
+                {% endif %}
+            </div>
+            
+        </div>
         
+        {% endfor %}
+    </div>
+    <div class="rows text-right">
+        <div class="col-sm-12">
+            {% if not request.user.is_staff %}
+                <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Add Kudo</a>
+            {% endif %}
+            <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">User Landing Page</a>
+        </div>
     </div>
     <!-- Add/Create Modal View -->
     <div class="modal hide" id="addProud">
@@ -49,39 +75,56 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <form method="post" action="/proud/" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            
-                            <label for="{{ pillar }}">Choose a Pillar:</label>
-                            {% comment %} <select class="selectpicker" multiple name="pillar" data-live-search="true" required> {% endcomment %}
-                            <select id="choices-multiple-remove-button" placeholder="" multiple name="pillar" data-live-search="true" required>
-                                {% for pillar in company_pillar %}
-                                <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
-                                {% endfor %}
-                            </select>
-                            
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        {{ form.proud_text|as_crispy_field }}
-                                        <span class="input-group-addon"></span>
-                                        {% for error in field.errors %}
-                                        <p style="color: red">{{ error }}</p>
-                                        {% endfor %}
-                                    </div>
+                    <form method="post" action="/proud/" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <label for="{{ pillar }}">Choose a Pillar:</label>
+                        {% comment %} <select class="selectpicker" multiple name="pillar" data-live-search="true" required> {% endcomment %}
+                        <select id="choices-multiple-remove-button" placeholder="" multiple name="pillar" data-live-search="true" required>
+                            {% for pillar in company_pillar %}
+                            <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {{ form.to|as_crispy_field }}
+                                    {{ form.proud_text|as_crispy_field }}
+                                    <span class="input-group-addon"></span>
+                                    {% for error in field.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
                                 </div>
                             </div>
-                            <hr>
-                            <div class="agree-sec m-0">
-                                <div class="btn-container text-center ml-auto ">
-                                    <button type="submit" class="btn btn-default text-uppercase">Submit</button>
-                                </div>
+                        </div>
+                        <hr>
+                        <div class="agree-sec m-0">
+                            <div class="btn-container text-center ml-auto ">
+                                <button type="submit" class="btn btn-default text-uppercase">Submit</button>
                             </div>
-                        </form>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div> 
+    <!-- Edit/Update Comment Modal View -->
+    <div class="modal hide" id="editProudModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProudModalLabel">Edit Prouds</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body" id='edit_proud'>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock content %}
 {% block scripts %}
@@ -95,46 +138,20 @@
  <script src="{% static 'assets/js/jquery.dataTables.min.js'%}"></script>
  <script src="{% static 'assets/js/dataTables.bootstrap4.min.js'%}"></script>
  <script>
-    function editpopup(data_id)
+    function editproudpopup(proud_id)
     {   
-        $('#editPledgeModal').modal('show');
+        $('#editProudModal').modal('show');
 
 
         $.ajax({
             type:'GET',
-            url:'/edit_wellbeing_pledge/'+data_id,
+            url:'/edit_proud/'+proud_id,
             success:function(data){
-                $('#edit_wellbeing_pledge').html(data)
+                $('#edit_proud').html(data)
             }
 
         })
     }
-    getPledgeText();
-</script>
-<script>
-    function editcommentpopup(comment_id)
-    {   
-        $('#editCommentModal').modal('show');
-
-
-        $.ajax({
-            type:'GET',
-            url:'/edit_comment/'+comment_id,
-            success:function(data){
-                $('#edit_comment').html(data)
-            }
-
-        })
-    }
-    getPledgeText();
-</script>
-<script>
-    function commentpopup(pledge_id)
-    {   
-        $('#addComment').modal('show');
-        $('#pledge_id').val(pledge_id);
-    }
-    getPledgeText();
 </script>
 <!-- multiselect dropdown -->
 <script>

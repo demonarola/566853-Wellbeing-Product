@@ -442,9 +442,10 @@ class AddCommentForm(forms.ModelForm):
         exclude = ['created_by','pledge']
 
 class AddProudForm(forms.ModelForm):
+    to = forms.CharField(label=_('To'),widget=forms.Textarea(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
     proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25,'placeholder': 'Enter proud text'}))
     class Meta:
         model = Proud
-        fields = ['proud_text']
+        fields = ['to','proud_text']
         exclude = ['created_by']
 

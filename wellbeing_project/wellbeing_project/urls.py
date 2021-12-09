@@ -41,6 +41,8 @@ urlpatterns = [
     path("edit_comment/<int:pk>", EditPledgeCommentView.as_view(), name="edit_comment"),
     path("delete_pledge_comment/<int:id>", DeletePledgeCommentView.as_view(), name="delete_pledge_comment"),
     path("proud/", ProudView.as_view(), name="proud"),
+    path("edit_proud/<int:pk>", EditProudView.as_view(), name="edit_proud"),
+    path("delete_proud/<int:id>", DeleteProudView.as_view(), name="delete_proud"),
     path("user_pledge/", UserPledgeView.as_view(), name="user_pledge"),
     path("profile/",ProfileView.as_view(),name="client-profile"),
 

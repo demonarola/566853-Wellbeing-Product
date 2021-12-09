@@ -149,3 +149,17 @@ class ProfileView(LoginRequiredMixin, APIView):
             return Response({'data':new_serializer.data,'error':"data is invalid"})
         new_serializer.save()
         return HttpResponseRedirect(redirect_to="/")
+
+
+class CompanyUserInfo(LoginRequiredMixin, APIView):
+    """ Show user details for a selected company """
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "company_user_info.html"
+    permission_classes = [IsAdminUser]
+    def get(self, request,company_id):
+        company_name = Client.objects.get(id=company_id)
+        connection.set_tenant(company_name)
+        users = User.objects.all()
+        # domain = Domain.objects.get(tenant_id=company_id)
+
+        return Response({'title':'Landing Page for the Registered User','company_name':company_name.company_name,'company_id':company_id,'users':users})

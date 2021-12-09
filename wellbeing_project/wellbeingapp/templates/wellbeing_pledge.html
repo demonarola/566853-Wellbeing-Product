@@ -12,17 +12,21 @@
 <section class="main-section" style="overflow-y: scroll;">
     
     <div class="btn-container text-center" style='margin:0%;'>
-        
-        {% if request.user.is_staff %}
-        <h3 class="text-center">Project Manager Landing Page</h3>
-        <div class="d-flex justify-content-center"><img src="{{logo.url}}" height:="300px" max-width="400px"></div>
-        {% comment %} <a data-toggle="modal" href=""class="open-AddDialog btn btn-default mt-3">User Landing Page</a> {% endcomment %}
-        <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
+        {% if request.user.is_staff and is_manager == None %}
+                <h3 class="text-center">Project Manager Landing Page</h3>
+                <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
+                <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">User Landing Page</a>
+                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Kudo’s</a>
+                <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
         {% else %}
-        <h3 class="text-center">User Landing Page</h3>
-        <div class="d-flex justify-content-center"><img src="{{logo.url}}" height:="300px" max-width="400px"></div>
-        <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Kudo’s</a>
-        <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a><br>
+            {% if is_manager == 'True' or not  request.user.is_staff %}
+                <h3 class="text-center">User Landing Page</h3>
+                <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
+                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Kudo’s</a>
+                {% if not request.user.is_staff %}
+                <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a><br>
+            {% endif %}
+        {% endif %}
         {% endif %}
     </div>
     <br>
@@ -52,7 +56,7 @@
                 <table style="font-weight: 000; color: black !important;">
                     <tr>
                         <td><img src="/media/{{data.person_photo}}" style="height:80px; width: 80px"></td>
-                        <td>&nbsp;&nbsp;{{data.person_name}}</td>
+                        <td>&nbsp;&nbsp;Pledge Contributor: {{data.person_name}}</td>
                     </tr>
                 </table>
                 <table>
@@ -60,7 +64,7 @@
                         <td>
                             {% for pillar in data.pillars.all %}
                             
-                                {{pillar}}
+                                Pillar Name: {{pillar}}
                                 {% if not  forloop.last %}
                                 ,
                                 {% endif %}
@@ -83,27 +87,23 @@
                         <div class="row">
                             <div class="col-sm-2" style="text-align: center;">
                                 <img src="/media/{{comment.created_by.profile.profile_picture}}" class="rounded mx-auto d-block" style="height:80px; width: 80px;">
-                                {{comment.created_by}}
                             </div>
                             <div class="col-sm-8">
-                                {{comment.comment}}
+                                Comment From: {{comment.created_by}}
                             </div>
-                            {% if not request.user.is_staff %}
-                            <div class="col-sm-1">
-                                <button type="button" class="btn btn-default" data-toggle="modal"  onclick = 'editcommentpopup("{{comment.id}}")'>
-                                    <i class="material-icons">edit</i>
-                                </button>
+                        </div>
+                        <div class="row">
+                                <div class="col-sm-10">
+                                    Comment: {{comment.comment}} &nbsp; 
+                                    <a href="" style="color:#118c66" data-toggle="modal"  onclick = 'editcommentpopup("{{comment.id}}")'><i class="material-icons">edit</i></a>
+                                    {% if not request.user.is_staff %}
+                                    <a href="{% url 'delete_pledge_comment' comment.id %}" style="color:#118c66"><i class="material-icons">delete</i></a>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="col-sm-1">
-                                <a class="btn btn-default" href="{% url 'delete_pledge_comment' comment.id %}">
-                                    <i class="material-icons">delete</i>
-                                </a>
-                            </div>
-                            {% endif %}
-                        </div><br>
                         {% endif %}
                     {% endfor %}                        
-                </div>
+                </div><br>
             </div>
         </div>   
         {% endfor %}

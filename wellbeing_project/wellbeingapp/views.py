@@ -133,12 +133,13 @@ class TeamAdminLogout(LogoutView):
 class WellbeingPledgeView(LoginRequiredMixin,APIView):
     template_name = "wellbeing_pledge.html"
     renderer_classes = [TemplateHTMLRenderer]
-    title = "Project Manager Screen"
+    # title = "Project Manager Screen"
     permission_classes = [IsAuthenticated]
 
     def get(self, request, **kwargs):
         """ render pledge form """
-        
+        is_manager = request.query_params.get('is_manager')
+        print(is_manager)
         url = request.get_host().split(':')[0]
         dom = Domain.objects.get(domain=url).tenant_id
         company_id = Client.objects.get(id=dom)
@@ -153,7 +154,7 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
         pledge = PledgeDetail.objects.all().order_by('-id')
         pledge_comments = PledgeComment.objects.all()
         return Response({
-                        "title":self.title,
+                        # "title":self.title,
                         "logo":company_id.company_logo, 
                         "form":form,
                         "pledge":pledge,
@@ -161,7 +162,8 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
                         "comment_form":comment_form,
                         "pledge_comments":pledge_comments,
                         "user":user,
-                        "company_pillar":company_pillar
+                        "company_pillar":company_pillar,
+                        "is_manager":is_manager
                         })
 
     def post(self,request):
@@ -286,6 +288,38 @@ class ProudView(LoginRequiredMixin,APIView):
             for pillar_obj in proud_text:
                 proud.pillars.add(pillar_obj)
             proud.save()
+            return HttpResponseRedirect('/proud')
+
+
+class DeleteProudView(LoginRequiredMixin,APIView):
+    url='/proud/'
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request,id):
+        """ render comment form """
+        obj = Proud.objects.get(id=id)
+        obj.delete()
+        return HttpResponseRedirect('/proud')
+
+class EditProudView(LoginRequiredMixin,APIView):
+    template_name = "edit_proud.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAuthenticated]
+    # title = "Project Manager Screen"
+
+    def get(self, request,pk, *args, **kwargs):
+        obj = Proud.objects.get(id=pk)
+        edit_proud_form = AddProudForm(instance=obj)
+        return Response({'edit_proud_form':edit_proud_form, 'pk':obj.id})
+
+    def post(self,request,pk,*args, **kwargs):
+        comment = Proud.objects.get(id=pk)
+        edit_proud_form = AddProudForm(request.POST, instance=comment)
+        print(edit_proud_form.errors)
+        if edit_proud_form.is_valid():
+            edit_proud_form = edit_proud_form.save(commit=False)
+            edit_proud_form.save()
+            print("---->bhbhbhbhbhb")
             return HttpResponseRedirect('/proud')
 
 class UserPledgeView(LoginRequiredMixin,APIView):
