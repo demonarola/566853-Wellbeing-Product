@@ -13,14 +13,17 @@
     
     <div class="btn-container text-center" style='margin:0%;'>
         {% if request.user.is_staff and is_manager == None %}
-                <h3 class="text-center">Project Manager Landing Page</h3>
+                <h3 class="text-center" style="color:red">Project Manager Landing Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
-                <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">User Landing Page</a>
-                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Kudo’s</a>
-                <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add Pledge</a><br>
+                <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">Pledge Kudos</a>
+                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Core Values Kudos</a>
+                <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add New Pledge</a>
+                <a href="#" class="btn btn-default mt-3">Employee Benefits</a>
+                <a href="#" class="btn btn-default mt-3">Add Employee Benefits</a>
+                <br>
         {% else %}
             {% if is_manager == 'True' or not  request.user.is_staff %}
-                <h3 class="text-center">User Landing Page</h3>
+                <h3 class="text-center">Pledge Kudos Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
                 <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Kudo’s</a>
                 {% if not request.user.is_staff %}
@@ -44,19 +47,20 @@
     {% if not request.user.is_staff %}
         {% for data in pledge %}
         <div class="row">
-            <div class="col-sm-1">
-                
+            <div class="col-sm-2">
                 {% if not request.user.is_staff %}
+                <div class="text-center">
                 <button type="button" class="btn btn-default" data-toggle="modal"  onclick = 'commentpopup("{{data.id}}")'>
-                    Comment
+                    Pledge Kudos<br>Comment
                 </button>
+                </div>
                 {% endif %}
             </div>
-            <div class="col-sm-11">
+            <div class="col-sm-10">
                 <table style="font-weight: 000; color: black !important;">
                     <tr>
                         <td><img src="/media/{{data.person_photo}}" style="height:80px; width: 80px"></td>
-                        <td>&nbsp;&nbsp;Pledge Contributor: <span style="font-size:120%">{{data.person_name}}</span></td>
+                        <td>&nbsp;&nbsp;<span style="color:red">Pledge Contributor: </span><span style="font-size:120%">{{data.person_name}}</span></td>
                     </tr>
                 </table>
                 <table>
@@ -64,7 +68,7 @@
                         <td>
                             {% for pillar in data.pillars.all %}
                             
-                                Pillar Name: {{pillar}}
+                                <span style="color:red">Pillar Name: {{pillar}}</span>
                                 {% if not  forloop.last %}
                                 ,
                                 {% endif %}
@@ -85,8 +89,8 @@
                     {% for comment in pledge_comments %}
                         {% if data.id == comment.pledge.id%}
                         <div class="row">
-                            <div class="col-sm-2" style="text-align: center;">
-                                <img src="/media/{{comment.created_by.profile.profile_picture}}" class="rounded mx-auto d-block" style="height:80px; width: 80px;">
+                            <div class="col-sm-1">
+                                <img src="/media/{{comment.created_by.profile.profile_picture}}" style="height:80px; width: 80px;">
                             </div>
                             <div class="col-sm-8">
                                 Comment From: <span style="font-size:120%">{{comment.created_by}}</span>
@@ -142,7 +146,14 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="form-group col-md-12 mb-0">
-                                        {{ form.pledge_text|as_crispy_field }}
+                                        {% comment %} {{ form.pledge_text|as_crispy_field }} {% endcomment %}
+                                         <b>{{ form.pledge_text.label}}:</b>
+                                        <div class="row">
+                                            <p style="color:red; margin;margin-left: 10px;">
+                                                A pledge kudo is a compliment for participation in special projects called Wellbeing Pledges.
+                                            </p>
+                                        </div>
+                                        <textarea id="" name="{{ form.pledge_text.name}}" class="form-control" rows="4" cols="50"></textarea>
                                     </div>
                                     <div class="form-group col-md-12 mb-0">
                                         {{ form.person_name|as_crispy_field }}

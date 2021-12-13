@@ -403,9 +403,9 @@ class TeamAdminRegistrationForm(UserCreationForm):
         return instance
 
 class AddPledgeForm(forms.ModelForm):
-    pledge_text = forms.CharField(required=True, widget=forms.Textarea(attrs={'rows':7,'placeholder': 'Enter pledge text'}))
+    pledge_text = forms.CharField(label=_('Pledge Text'),required=True, widget=forms.Textarea(attrs={'rows':7}))
     person_name = forms.CharField(label=_('Contributors Name'),required=True, widget=forms.TextInput(attrs={'cols':25,'placeholder': 'Enter person name'}))
-    person_photo = forms.ImageField(label=_('Person Photo'))
+    person_photo = forms.ImageField(label=_('Contributors Photo'))
     class Meta:
         model = PledgeDetail
         fields = ['pledge_text','person_name','person_photo']
@@ -441,7 +441,7 @@ class AddCommentForm(forms.ModelForm):
 
 class AddProudForm(forms.ModelForm):
     to = forms.CharField(label=_('To'),widget=forms.Textarea(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
-    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25,'placeholder': 'Enter proud text'}))
+    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25}))
     class Meta:
         model = Proud
         fields = ['to','proud_text']

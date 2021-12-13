@@ -13,18 +13,16 @@
 <section class="main-section" style="overflow-y: scroll;">
     <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
-        <h3>Kudo’s</h3>
+        <h3 style="color:red">Core Values Kudos For (core<br> value name)</h3>
+    </div>
+    <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
+        {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">Pledge Kudos</a>
+        <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Core Values Kudos</a>
+        <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a>
+        <a href="#" class="btn btn-default mt-3">Employee Benefits</a> {% endcomment %}
     </div>
     <div class="btn-container" style='margin:2%0%2%0%;'>
         {% for data in proud %}
-        <h4 class="text-center">
-            {% for pillar in data.pillars.all %}
-                {{pillar}}
-                {% if not  forloop.last %}
-                ,
-                {% endif %}
-            {% endfor %}
-        </h4>
         <div class="row">
             <div class="col-sm-1">
             </div>
@@ -32,10 +30,10 @@
                 <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:80px; width: 80px"><br>
             </div>
             <div class="col-sm-9">
-                From: {{data.created_by.first_name}}
+                <span style="color:red"> Kudo From: </span>{{data.created_by.first_name}}
                 <div class="row">
                     <div class="col-sm-12">
-                    To: {{data.to}}
+                    <span style="color:red">To: </span>{{data.to}}
                     </div>
                 </div>
             </div><br><br>
@@ -44,6 +42,14 @@
             <div class="col-sm-1">
             </div>
             <div class="col-sm-10">
+                <span style="color:red"> Pillars:   
+                    {% for pillar in data.pillars.all %}
+                        {{pillar}}
+                        {% if not  forloop.last %}
+                        ,
+                        {% endif %}:
+                    {% endfor %}
+                </span>
                 {{data.proud_text}}&nbsp;
                 {% if not request.user.is_staff %}
                 <a style="color:#118c66" data-toggle="editProudModal" onclick = 'editproudpopup("{{data.id}}")'><i class="material-icons">edit</i></a>
@@ -69,7 +75,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Kudo</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Core Value Kudo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
