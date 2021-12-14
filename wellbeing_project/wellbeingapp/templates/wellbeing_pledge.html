@@ -7,6 +7,10 @@
 .companies-name{
     text-transform:none;
 }
+.inactive_buttons {
+    background-color: #F0F0F0 !important;
+    color: black !important;
+}
 </style>
 
 <section class="main-section" style="overflow-y: scroll;">
@@ -15,17 +19,18 @@
         {% if request.user.is_staff and is_manager == None %}
                 <h3 class="text-center" style="color:red">Project Manager Landing Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
-                <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">Pledge Kudos</a>
-                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Core Values Kudos</a>
+                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
+                <a href="#" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a>
+                <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
                 <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add New Pledge</a>
-                <a href="#" class="btn btn-default mt-3">Employee Benefits</a>
-                <a href="#" class="btn btn-default mt-3">Add Employee Benefits</a>
+                <a href="#" class="inactive_buttons btn btn-default mt-3">See Employee Benefits</a>
+                <a href="#" class="inactive_buttons btn btn-default mt-3">Add Employee Benefits</a>
                 <br>
         {% else %}
             {% if is_manager == 'True' or not  request.user.is_staff %}
                 <h3 class="text-center">Pledge Kudos Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
-                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">Kudo’s</a>
+                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
                 {% if not request.user.is_staff %}
                 <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a><br>
             {% endif %}
@@ -46,6 +51,19 @@
     {% endif %} 
     {% if not request.user.is_staff %}
         {% for data in pledge %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 class="text-center">
+                Pillar Name:
+                {% for pillar in data.pillars.all %}       
+                     {{pillar}}
+                    {% if not  forloop.last %}
+                    ,
+                    {% endif %}
+                {% endfor %}
+                </h4>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-2">
                 {% if not request.user.is_staff %}
@@ -119,7 +137,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Pledge</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add: Suggest New Pledge</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -187,7 +205,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Pledge</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add: Suggest New Pledge</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

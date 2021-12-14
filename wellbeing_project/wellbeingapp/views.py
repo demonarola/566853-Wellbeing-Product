@@ -151,7 +151,7 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
         form = AddPledgeForm()
         user_pledge_form = UserPledgeForm()
         comment_form = AddCommentForm()
-        pledge = PledgeDetail.objects.all().order_by('id')
+        pledge = PledgeDetail.objects.all()
         pledge_comments = PledgeComment.objects.all()
         return Response({
                         # "title":self.title,
@@ -288,7 +288,7 @@ class ProudView(LoginRequiredMixin,APIView):
             for pillar_obj in proud_text:
                 proud.pillars.add(pillar_obj)
             proud.save()
-            return HttpResponseRedirect('/proud')
+            return HttpResponseRedirect('/wellbeing_pledge')
 
 
 class DeleteProudView(LoginRequiredMixin,APIView):

@@ -54,7 +54,13 @@ class AdminView(LoginRequiredMixin, APIView):
 
     
     def get(self, request): 
-        return Response({"companies":Domain.objects.all().order_by(Lower('tenant__company_name')),"form":ClientRegistrationForm,'title':'Landing Page for the Company'})
+
+        
+        return Response({"companies":Domain.objects.all().order_by(Lower('tenant__company_name')),
+        "form":ClientRegistrationForm,
+        'title':'Landing Page for the Company',
+        "users":User.objects.all()
+        })
 
    
 class RegistrationListView(ListView):

@@ -1,5 +1,5 @@
 {% extends "container.html" %}
-{% load staticfiles %}
+{% load staticfiles filters%}
 {% block title %}<img src="{% static 'assets/images/com_icon.jpg' %}" alt="" width="40px" class="img-fluid"> {{title}}{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -32,12 +32,10 @@
             
                     <thead>
                         <tr>
-                            <th>Company Name
-                            </th>
-                            <th>Registration link
-                            </th>
-                            <th>Action
-                            </th>
+                            <th>Company Name</th>
+                            <th>Registration link</th>
+                            <th>Project Manager</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,6 +43,10 @@
                         <tr> 
                            <td class='companies-name' id='cname{{company.id}}'><a href='{% url "user_info"  company.tenant.id %}'>{{company.tenant.company_name}}</a></td>
                             <td class="companies-name">{{company.domain}}/registration/{{company.tenant.random_url}}</td>
+                            <td class="companies-name">
+                            {% comment %} {{company.id|get_project_manager}} {% endcomment %}
+                           {{company.tenant.project_manager_email}}
+                            </td>
                             <td><a data-toggle="modal" class="open-ConfirmationDialog" data-id="{{company.id}}"
                                     data-mode="company" href="#deleteRecord"><i
                                         class="material-icons">
