@@ -20,7 +20,7 @@
                 <h3 class="text-center" style="color:red">Project Manager Landing Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
                 <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
-                <a href="#" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a>
+                {% comment %} <a href="#" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a> {% endcomment %}
                 <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
                 <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add New Pledge</a>
                 <a href="#" class="inactive_buttons btn btn-default mt-3">See Employee Benefits</a>
