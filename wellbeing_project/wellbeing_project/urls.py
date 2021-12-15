@@ -32,7 +32,7 @@ urlpatterns = [
         name="logout",
     ),
     path('', include('django.contrib.auth.urls')),
-    path("registration/<uuid:random_url>/", TeamAdminRegistrationView.as_view(), name="team-admin-registration"),
+    path("registration/", TeamAdminRegistrationView.as_view(), name="team-admin-registration"),
     path("wellbeing_pledge/", WellbeingPledgeView.as_view(), name="wellbeing_pledge"),
     # path("wellbeing_pledge/<int:id>/", PledgeUpdateView.as_view(), name="updatedata"),
     path("wellbeing/", include("wellbeingapp.urls"), name="wellbeing"),

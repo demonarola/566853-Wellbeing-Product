@@ -74,7 +74,7 @@ class TeamAdminRegistrationView(APIView):
 
     title = "USER REGISTRATION"
 
-    def get(self, request, random_url):
+    def get(self, request):
         """ render registration template """
         return Response({'form': self.form_class,"title":self.title})
     

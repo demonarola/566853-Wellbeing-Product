@@ -193,7 +193,8 @@ $.get("https://ipinfo.io", function (response) {
 <script>
 
 var path = window.location.href.split('/');
-if(path[3] == 'registration' && path[5] == ''){
+
+if(path[3] == 'registration' && path[4] == ''){
     $('.so_reg').css('display','none')
     $('#myModal2').modal({backdrop: 'static',keyboard: false,show: true });
 
