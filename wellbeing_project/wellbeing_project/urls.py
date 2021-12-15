@@ -24,7 +24,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("login/", EmailLoginView.as_view(title="Team member sign in",notes=''), name="login"),
+    path("login/", EmailLoginView.as_view(title="User",notes=''), name="login"),
     path(
         "logout/",
         TeamAdminLogout.as_view(),

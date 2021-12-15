@@ -44,7 +44,7 @@ from wellbeingapp.serializers import *
 class EmailLoginView(auth_view.LoginView):
     """ Login View """
     form_class = EmailAuthenticationForm
-    title ="Company Registration"
+    title ="Company"
     notes = 'This academy registration is for academy use only.An email and password from the academy are needed to set up a teams get it session.'
     is_signup=True
     def get_context_data(self, **kwargs):
