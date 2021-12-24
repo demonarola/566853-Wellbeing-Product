@@ -18,13 +18,23 @@ class Client(TenantMixin):
 
 class Pillar(models.Model):
     
-    """ This table is used to create Piller.
+    """ This table is used to create Core Value Pledge Kudo.
     """
     client_id = models.ForeignKey(Client, on_delete=models.CASCADE,related_name="pillar", null=True)
     pillar = models.CharField(max_length=1000,verbose_name="Pillar")
 
     def __str__(self):
         return self.pillar
+
+class AdminPledge(models.Model):
+    
+    """ This table is used to create Pledge Names.
+    """
+    client_id = models.ForeignKey(Client, on_delete=models.CASCADE,related_name="admin_pledge", null=True)
+    admin_pledge = models.CharField(max_length=1000,verbose_name="Admin_pledge")
+
+    def __str__(self):
+        return self.admin_pledge
 
 class Domain(DomainMixin):
     pass

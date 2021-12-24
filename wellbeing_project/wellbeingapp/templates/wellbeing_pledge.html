@@ -19,9 +19,11 @@
         {% if request.user.is_staff and is_manager == None %}
                 <h3 class="text-center" style="color:red">Project Manager Landing Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
-                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
-                {% comment %} <a href="#" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a> {% endcomment %}
-                <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
+                <a href="#" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
+                <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a>
+                <a href="{% url 'proud' %}"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
+                <a data-toggle="modal" href="#addPledgeKudos"class="open-AddDialog btn btn-default mt-3">Add Pledge Kudos</a>
+                {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a> {% endcomment %}
                 <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add New Pledge</a>
                 <a href="#" class="inactive_buttons btn btn-default mt-3">See Employee Benefits</a>
                 <a href="#" class="inactive_buttons btn btn-default mt-3">Add Employee Benefits</a>
@@ -31,6 +33,9 @@
                 <h3 class="text-center">Pledge Kudos Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
                 <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
+                <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a>
+                <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
+                <a data-toggle="modal" href="#addPledgeKudos"class="open-AddDialog btn btn-default mt-3">Add Pledge Kudos</a>
                 {% if not request.user.is_staff %}
                 <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a><br>
             {% endif %}
@@ -55,12 +60,12 @@
             <div class="col-sm-12">
                 <h4 class="text-center">
                 Pillar Name:
-                {% for pillar in data.pillars.all %}       
+             {% for pillar in data.admin_pledge.all %}       
                      {{pillar}}
                     {% if not  forloop.last %}
                     ,
                     {% endif %}
-                {% endfor %}
+                {% endfor %} 
                 </h4>
             </div>
         </div>
@@ -84,13 +89,13 @@
                 <table>
                     <tr>
                         <td>
-                            {% for pillar in data.pillars.all %}
+                           {% for pillar in data.admin_pledge.all %}
                             
                                 <span style="color:red">Pillar Name: {{pillar}}</span>
                                 {% if not  forloop.last %}
                                 ,
                                 {% endif %}
-                            {% endfor %}
+                            {% endfor %} 
                             : {{data.pledge_text}}
                         </td>
                     </tr>
@@ -131,13 +136,105 @@
         {% endfor %}
     {% endif %}
     </div>
+    <!-- Add/Create Pledge Kudo Modal View -->
+    <div class="modal hide" id="addPledgeKudos">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Pledge Kudo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/proud/" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <label for="{{ pledge_kudo }}">Choose Pledge Name:</label>
+                        {% comment %} <select class="selectpicker" multiple name="pillar" data-live-search="true" required> {% endcomment %}
+                        <select id="choices-multiple-remove-button" placeholder="" multiple name="pledge_kudo" data-live-search="true" required>
+                            {% for pledge_kudo in company_pledge_kudo %}
+                            <option value="{{ pledge_kudo.id}}">{{ pledge_kudo }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {{ pledge_kudo_form.to|as_crispy_field }}
+                                    {{ pledge_kudo_form.proud_text|as_crispy_field }}
+                                    <span class="input-group-addon"></span>
+                                    {% for error in field.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="agree-sec m-0">
+                            <div class="btn-container text-center ml-auto ">
+                                <button type="submit" class="btn btn-default text-uppercase">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add/Create Core Kudo Modal View -->
+    <div class="modal hide" id="addCoreKudos">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Core Values Kudos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="/core_kudo/" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <label for="{{ core_kudo }}">Choose Piller Name:</label>
+                        {% comment %} <select class="selectpicker" multiple name="pillar" data-live-search="true" required> {% endcomment %}
+                        <select id="choices-multiple-remove-button" placeholder="" multiple name="core_kudos" data-live-search="true" required>
+                            {% for core_kudo in company_pillar %}
+                            <option value="{{ core_kudo.id}}">{{ core_kudo }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    {{ core_kudo_form.to|as_crispy_field }}
+                                    {{ core_kudo_form.proud_text|as_crispy_field }}
+                                    <span class="input-group-addon"></span>
+                                    {% for error in field.errors %}
+                                    <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="agree-sec m-0">
+                            <div class="btn-container text-center ml-auto ">
+                                <button type="submit" class="btn btn-default text-uppercase">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Project Manager Add/Create pledge Modal View -->
     <div class="modal hide" id="addPledge">
 
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Suggest New Pledge</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Pledge1212</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -152,9 +249,9 @@
                                 <div class="col-md-12">
                                     <div class="row d-flex justify-content-center mt-100">
                                     <div class="col-md-12">
-                                        <select id="choices-multiple-remove-button" placeholder="" multiple name="pillar" data-live-search="true" required>
-                                            {% for pillar in company_pillar %}
-                                            <option value="{{ pillar.id}}">{{ pillar.pillar }}</option>
+                                        <select id="choices-multiple-remove-button" placeholder="" multiple name="pledge_kudo" data-live-search="true" required>
+                                            {% for pledge in company_pledge_kudo %}
+                                            <option value="{{ pledge.id}}">{{ pledge.admin_pledge }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>

@@ -16,10 +16,11 @@ class ClientRegistrationForm(forms.ModelForm):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed and no blank spaces.')
     domain = forms.CharField(max_length=100,validators=[alphanumeric],label="Prefix for domain",required=True)
     company_logo = forms.ImageField(label=_('Company Logo'),required=False)
-    pillar = forms.CharField(max_length=100,label="Pillars",required=True,widget=forms.Textarea(attrs={'rows':5,'cols':32}))
+    pillar = forms.CharField(max_length=100,label="Core Value Pillar Names",required=True,widget=forms.Textarea(attrs={'rows':5,'cols':32}))
+    admin_pledge = forms.CharField(max_length=100,label="Pledge Names",required=True,widget=forms.Textarea(attrs={'rows':5,'cols':32}))
     class Meta:
         model = Client
-        fields = ('domain','company_name','project_manager_email','company_logo','pillar')
+        fields = ('domain','company_name','project_manager_email','company_logo','pillar','admin_pledge')
         
     def __init__(self, *args, **kwargs):
         """ apply css classes to form or models fields """
@@ -70,7 +71,7 @@ class ClientRegistrationForm(forms.ModelForm):
         schema_name = cd.get("company_name").split(' ')[0].lower()
         print("company_name",schema_name)
         pillar = cd.get("pillar").split('\n')
-        
+        admin_pledge = cd.get("admin_pledge").split('\n')
         check = Client.objects.filter(schema_name=schema_name)
         print("check",check)
         for i in check:
@@ -89,6 +90,8 @@ class ClientRegistrationForm(forms.ModelForm):
                 instance.domains.create(domain=cd.get("domain"))
                 for pillar_text in pillar:
                     Pillar.objects.create(client_id=instance, pillar=pillar_text.replace('\r',''))
+                for admin_pledge_text in admin_pledge:
+                    AdminPledge.objects.create(client_id=instance, admin_pledge=admin_pledge_text.replace('\r',''))
             except Exception as e:
                 print("Exception: ",e)
                 pass

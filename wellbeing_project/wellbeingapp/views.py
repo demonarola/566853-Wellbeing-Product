@@ -145,7 +145,8 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
         company_id = Client.objects.get(id=dom)
         connection.set_tenant(company_id)
         company_pillar = Pillar.objects.filter(client_id=company_id.id)
-
+        company_pledge_kudo = AdminPledge.objects.filter(client_id=company_id.id)
+       
         user = request.user
         form = None
         form = AddPledgeForm()
@@ -153,6 +154,18 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
         comment_form = AddCommentForm()
         pledge = PledgeDetail.objects.all()
         pledge_comments = PledgeComment.objects.all()
+        # for d in pledge:
+        #     print(d.admin_pillar.all())
+
+        """ render Add Pledge Kudo form """
+        pledge_kudo_form = AddProudForm()
+        pledge_kudo = PledgeKudo.objects.all()
+        # for i in pledge_kudo:
+        #     print("=====",i.pillars.all())
+        """ render Add Core Kudo form """
+        core_kudo_form = AddCoreKudoForm()
+        core_kudo = CoreKudos.objects.all()
+
         return Response({
                         # "title":self.title,
                         "logo":company_id.company_logo, 
@@ -163,7 +176,12 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
                         "pledge_comments":pledge_comments,
                         "user":user,
                         "company_pillar":company_pillar,
-                        "is_manager":is_manager
+                        "is_manager":is_manager,
+                        "pledge_kudo_form":pledge_kudo_form,
+                        "pledge_kudo":pledge_kudo,
+                        "company_pledge_kudo":company_pledge_kudo,
+                        "core_kudo_form":core_kudo_form,
+                        "core_kudo":core_kudo,
                         })
 
     def post(self,request):
@@ -172,9 +190,10 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
             pledge = form.save(commit=False)
             pledge.created_by = get_object_or_404(User, pk=request.user.id)
             pledge.save()
-            pillar_text = request.POST.getlist('pillar')
+            pillar_text = request.POST.getlist('pledge_kudo')
+            print("\n\n Pillar text == ", pillar_text,"==\n\n")
             for pillar_obj in pillar_text:
-                pledge.pillars.add(pillar_obj)
+                pledge.admin_pledge.add(pillar_obj)
             pledge.save()
             messages.success(request, 'Pledge Created successfully!')
             return HttpResponseRedirect('/wellbeing_pledge')
@@ -264,18 +283,20 @@ class ProudView(LoginRequiredMixin,APIView):
         dom = Domain.objects.get(domain=url).tenant_id
         company_id = Client.objects.get(id=dom)
         connection.set_tenant(company_id)
-        company_pillar = Pillar.objects.filter(client_id=company_id.id)
+        company_pledge_kudo = AdminPledge.objects.filter(client_id=company_id.id)
 
         user = request.user
         form = None
         form = AddProudForm()
-        proud = Proud.objects.all()
+        pledge_kudo = PledgeKudo.objects.all()
+
         return Response({
                         "title":self.title,
                         "logo":company_id.company_logo, 
-                        "form":form,"proud":proud,
+                        "form":form,
+                        "pledge_kudo":pledge_kudo,
                         "user":user,
-                        "company_pillar":company_pillar
+                        "company_pledge_kudo":company_pledge_kudo
                         })
 
     def post(self,request):
@@ -284,12 +305,45 @@ class ProudView(LoginRequiredMixin,APIView):
             proud = form.save(commit=False)
             proud.created_by = get_object_or_404(User, pk=request.user.id)
             proud.save()
-            proud_text = request.POST.getlist('pillar')
+            proud_text = request.POST.getlist('pledge_kudo')
             for pillar_obj in proud_text:
                 proud.pillars.add(pillar_obj)
             proud.save()
             return HttpResponseRedirect('/wellbeing_pledge')
 
+
+# def get(self, request, **kwargs):
+#         """ render proud form """
+        
+#         url = request.get_host().split(':')[0]
+#         dom = Domain.objects.get(domain=url).tenant_id
+#         company_id = Client.objects.get(id=dom)
+#         connection.set_tenant(company_id)
+#         company_pillar = Pillar.objects.filter(client_id=company_id.id)
+
+#         user = request.user
+#         form = None
+#         form = AddProudForm()
+#         proud = PledgeKudo.objects.all()
+#         return Response({
+#                         "title":self.title,
+#                         "logo":company_id.company_logo, 
+#                         "form":form,"proud":proud,
+#                         "user":user,
+#                         "company_pillar":company_pillar
+#                         })
+
+#     def post(self,request):
+#         form = AddProudForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             proud = form.save(commit=False)
+#             proud.created_by = get_object_or_404(User, pk=request.user.id)
+#             proud.save()
+#             proud_text = request.POST.getlist('pillar')
+#             for pillar_obj in proud_text:
+#                 proud.pillars.add(pillar_obj)
+#             proud.save()
+#             return HttpResponseRedirect('/wellbeing_pledge')
 
 class DeleteProudView(LoginRequiredMixin,APIView):
     url='/proud/'
@@ -297,7 +351,7 @@ class DeleteProudView(LoginRequiredMixin,APIView):
 
     def get(self,request,id):
         """ render comment form """
-        obj = Proud.objects.get(id=id)
+        obj = PledgeKudo.objects.get(id=id)
         obj.delete()
         return HttpResponseRedirect('/proud')
 
@@ -308,12 +362,12 @@ class EditProudView(LoginRequiredMixin,APIView):
     # title = "Project Manager Screen"
 
     def get(self, request,pk, *args, **kwargs):
-        obj = Proud.objects.get(id=pk)
+        obj = PledgeKudo.objects.get(id=pk)
         edit_proud_form = AddProudForm(instance=obj)
         return Response({'edit_proud_form':edit_proud_form, 'pk':obj.id})
 
     def post(self,request,pk,*args, **kwargs):
-        comment = Proud.objects.get(id=pk)
+        comment = PledgeKudo.objects.get(id=pk)
         edit_proud_form = AddProudForm(request.POST, instance=comment)
         print(edit_proud_form.errors)
         if edit_proud_form.is_valid():
@@ -389,3 +443,22 @@ class ProfileView(LoginRequiredMixin, APIView):
         #     self.success_url = self.request.session.get('url')
            
         return HttpResponseRedirect(redirect_to=self.success_url)
+
+
+class CoreKudoView(LoginRequiredMixin,APIView):
+    template_name = "core_kudo.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    title = "Core Kudos Details Screen"
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request):
+        form = AddCoreKudoForm(request.POST, request.FILES)
+        if form.is_valid():
+            core_kudo = form.save(commit=False)
+            core_kudo.created_by = get_object_or_404(User, pk=request.user.id)
+            core_kudo.save()
+            core_kudo_text = request.POST.getlist('core_kudos')
+            for core_kudo_obj in core_kudo_text:
+                core_kudo.pillars.add(core_kudo_obj)
+            core_kudo.save()
+            return HttpResponseRedirect('/wellbeing_pledge')

@@ -41,13 +41,13 @@ class UserProfile(models.Model):
 
 class PledgeDetail(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    pillars = models.ManyToManyField(to='customers.Pillar',blank=True)
+    admin_pledge = models.ManyToManyField(to='customers.AdminPledge',blank=True)
     pledge_text = models.TextField(default='',null=True, blank=True)
     person_name = models.CharField(max_length=200)
     person_photo = models.ImageField(upload_to="personphoto/",default='profilepic/default-user.png')
 
     def __str__(self):
-        return self.pillars
+        return self.admin_pillar
 
 
 class PledgeComment(models.Model):
@@ -56,9 +56,16 @@ class PledgeComment(models.Model):
     comment = models.TextField(default='',null=True, blank=True)
 
 
-class Proud(models.Model):
+class CoreKudos(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    pillars = models.ManyToManyField(to='customers.Pillar',related_name='proud_pillars',blank=True)
+    pillars = models.ManyToManyField(to='customers.Pillar',related_name='core_kudos',blank=True)
+    to = models.CharField(max_length=200,null=True, blank=True)
+    proud_text = models.TextField(default='',null=True, blank=True)
+
+# for Pledge kudos
+class PledgeKudo(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    pillars = models.ManyToManyField(to='customers.AdminPledge',related_name='pledge_kudo',blank=True)
     to = models.CharField(max_length=200,null=True, blank=True)
     proud_text = models.TextField(default='',null=True, blank=True)
 

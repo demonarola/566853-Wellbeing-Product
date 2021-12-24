@@ -443,7 +443,15 @@ class AddProudForm(forms.ModelForm):
     to = forms.CharField(label=_('To'),widget=forms.Textarea(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
     proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25}))
     class Meta:
-        model = Proud
+        model = PledgeKudo
+        fields = ['to','proud_text']
+        exclude = ['created_by']
+
+class AddCoreKudoForm(forms.ModelForm):
+    to = forms.CharField(label=_('To'),widget=forms.Textarea(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
+    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25}))
+    class Meta:
+        model = CoreKudos
         fields = ['to','proud_text']
         exclude = ['created_by']
 
