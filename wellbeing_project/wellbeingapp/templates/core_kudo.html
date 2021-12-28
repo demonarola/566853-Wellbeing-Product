@@ -13,7 +13,7 @@
 <section class="main-section" style="overflow-y: scroll;">
     <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
-        <h3 style="color:red">Pledge Kudos</h3>
+        <h3 style="color:red">Core Kudos</h3>
     </div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
         {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">Pledge Kudos</a>
@@ -22,73 +22,82 @@
         <a href="#" class="btn btn-default mt-3">Employee Benefits</a> {% endcomment %}
     </div>
     <div class="btn-container" style='margin:2%0%2%0%;'>
-        {% for data in proud %}
+        {% for data in core_kudos %}
         <div class="row">
-            <div class="col-sm-1">
-            </div>
-            <div class="col-sm-1">
-                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:80px; width: 80px"><br>
-            </div>
-            <div class="col-sm-9">
-                <span style="color:red"> Kudo From: </span>{{data.created_by.first_name}}
-                <div class="row">
-                    <div class="col-sm-12">
-                    <span style="color:red">To: </span>{{data.to}}
-                    </div>
-                </div>
-            </div><br><br>
+        <div class="col-sm-1">
         </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-6">
+            <span style="color:red; font-size:140%"> Pledge Name: </span>  
+            <span style="font-size:140%">
+                {% for pillar in data.pillars.all %}
+                    {{pillar}}
+                    {% if not  forloop.last %}
+                    ,
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </div>
+        </div><br>
         <div class="row">
             <div class="col-sm-1">
             </div>
-            <div class="col-sm-10">
-                <span style="color:red"> Pillars:   
-                    {% for pillar in data.pillars.all %}
-                        {{pillar}}
-                        {% if not  forloop.last %}
-                        ,
-                        {% endif %}:
-                    {% endfor %}
-                </span>
-                {{data.proud_text}}&nbsp;
-                {% if not request.user.is_staff %}
-                <a style="color:#118c66" data-toggle="editProudModal" onclick = 'editproudpopup("{{data.id}}")'><i class="material-icons">edit</i></a>
-                <a href="{% url 'delete_proud' data.id %} " style="color:#118c66"><i class="material-icons">delete</i></a>    
+            <div class="col-sm-2">
+                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:100px; width: 100px"><br>
+                <span style="color:red"> From: </span>{{data.created_by.first_name}}
+            </div>
+            <div class="col-sm-2">
+                <img src="/media/{{data.to_person_photo}}" style="height:100px; width: 100px">
+                {% if data.to_person_photo == "profilepic/default-user.png" %}
+                    {% if request.user == data.created_by %}
+                    <a style="color:#118c66" data-toggle="editCoreKudosPhotModal" onclick = 'editcorekudophotopopup("{{data.id}}")'><i class="material-icons">edit</i></a>
+                    {% endif %}
+                {% endif %}<br>
+                <span style="color:red"> To: </span>{{data.to}}
+            </div>
+            <div class="col-sm-6">
+                <p style="text-align: justify;">{{data.proud_text}}
+                {% if request.user == data.created_by %}
+                    <a style="color:#118c66" data-toggle="editCoreKudosModal" onclick = 'edit_core_kudos_popup("{{data.id}}")'><i id="edit-pledge" class="material-icons">edit</i></a>
+                    <a href="{% url 'delete_core_kudos' data.id %} " style="color:#118c66"><i class="material-icons">delete</i></a>
                 {% endif %}
+                </p>
             </div>
-            
-        </div>
+        </div><br>
         
         {% endfor %}
-    </div>
+    </div><hr>
     <div class="rows text-right">
         <div class="col-sm-12">
             {% if not request.user.is_staff %}
-                <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Add Kudo</a>
+                <a data-toggle="modal" href="#addKudos" class="open-AddDialog btn btn-default mt-3">Add Core Kudo</a>
             {% endif %}
             <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">User Landing Page</a>
         </div>
     </div>
     <!-- Add/Create Modal View -->
-    <div class="modal hide" id="addProud">
+    <div class="modal hide" id="addKudos">
 
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Pledge Kudo</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Core Kudo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="/proud/" enctype="multipart/form-data">
+                    <form method="post" action="/core_kudo/" enctype="multipart/form-data">
                         {% csrf_token %}
                         
-                        <label for="{{ pledge_kudo }}">Choose Pledge Name:</label>
+                        <label for="{{ core_kudo }}">Choose Pillar Name:</label>
                         {% comment %} <select class="selectpicker" multiple name="pillar" data-live-search="true" required> {% endcomment %}
-                        <select id="choices-multiple-remove-button" placeholder="" multiple name="pledge_kudo" data-live-search="true" required>
-                            {% for pledge_kudo in company_pledge_kudo %}
-                            <option value="{{ pledge_kudo.id}}">{{ pledge_kudo.admin_pledge }}</option>
+                        <select id="choices-multiple-remove-button" placeholder="" multiple name="core_kudos" data-live-search="true" required>
+                            {% for pillar in pillars %}
+                            <option value="{{ pillar.id}}">{{ pillar }}</option>
                             {% endfor %}
                         </select>
                         
@@ -96,6 +105,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     {{ form.to|as_crispy_field }}
+                                    {{ form.to_person_photo|as_crispy_field }}
                                     {{ form.proud_text|as_crispy_field }}
                                     <span class="input-group-addon"></span>
                                     {% for error in field.errors %}
@@ -116,17 +126,33 @@
         </div>
     </div> 
     <!-- Edit/Update Comment Modal View -->
-    <div class="modal hide" id="editProudModal">
+    <div class="modal hide" id="editCoreKudosModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editProudModalLabel">Edit Prouds</h5>
+                    <h5 class="modal-title" id="editCoreKudosModalLabel">Edit Core Kudos</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 
-                <div class="modal-body" id='edit_proud'>
+                <div class="modal-body" id='edit_core_kudos'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit/Update Core Kudos Photo Modal View -->
+    <div class="modal hide" id="editCoreKudosPhotModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCoreKudosPhotModalLabel">Edit Photo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body" id='edit_core_kudo_photo'>
                 </div>
             </div>
         </div>
@@ -144,16 +170,33 @@
  <script src="{% static 'assets/js/jquery.dataTables.min.js'%}"></script>
  <script src="{% static 'assets/js/dataTables.bootstrap4.min.js'%}"></script>
  <script>
-    function editproudpopup(proud_id)
+    function edit_core_kudos_popup(proud_id)
     {   
-        $('#editProudModal').modal('show');
+        $('#editCoreKudosModal').modal('show');
 
 
         $.ajax({
             type:'GET',
-            url:'/edit_proud/'+proud_id,
+            url:'/edit_core_kudos/'+proud_id,
             success:function(data){
-                $('#edit_proud').html(data)
+                $('#edit_core_kudos').html(data)
+            }
+
+        })
+    }
+</script>
+<!-- Edit Core Kudos Photo -->
+<script>
+    function editcorekudophotopopup(kudo_id)
+    {   
+        $('#editCoreKudosPhotModal').modal('show');
+
+
+        $.ajax({
+            type:'GET',
+            url:'/edit_core_kudos_photo/'+kudo_id,
+            success:function(data){
+                $('#edit_core_kudo_photo').html(data)
             }
 
         })

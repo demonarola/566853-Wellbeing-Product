@@ -440,18 +440,30 @@ class AddCommentForm(forms.ModelForm):
         exclude = ['created_by','pledge']
 
 class AddProudForm(forms.ModelForm):
-    to = forms.CharField(label=_('To'),widget=forms.Textarea(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
-    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25}))
+    to = forms.CharField(label=_('To'),widget=forms.TextInput(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
+    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':6,'cols':25}))
     class Meta:
         model = PledgeKudo
-        fields = ['to','proud_text']
+        fields = ['to','proud_text','to_person_photo']
         exclude = ['created_by']
 
 class AddCoreKudoForm(forms.ModelForm):
-    to = forms.CharField(label=_('To'),widget=forms.Textarea(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
+    to = forms.CharField(label=_('To'),widget=forms.TextInput(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
     proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25}))
     class Meta:
         model = CoreKudos
-        fields = ['to','proud_text']
+        fields = ['to','proud_text','to_person_photo']
         exclude = ['created_by']
+
+class EditPledgeKudosPhotoForm(forms.ModelForm):
+    class Meta:
+        model = PledgeKudo
+        fields = ['to_person_photo',]
+        exclude = ['created_by','pillars','to','proud_text']
+
+class EditCoreKudosPhotoForm(forms.ModelForm):
+    class Meta:
+        model = CoreKudos
+        fields = ['to_person_photo',]
+        exclude = ['created_by','pillars','to','proud_text']
 

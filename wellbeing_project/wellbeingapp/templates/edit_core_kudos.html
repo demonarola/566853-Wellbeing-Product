@@ -2,15 +2,15 @@
  {% load crispy_forms_tags %}
 
 {% block content %}    
-    <form method="post" action="/edit_proud/{{pk}}" enctype="multipart/form-data">
+    <form method="post" action="/edit_core_kudos/{{pk}}" enctype="multipart/form-data">
         
         {% csrf_token %}
         <div class="form-group" id=''>
             <div class="row">
                 <div class="col-sm-12">
-                <input type="hidden" name="to" value="{{ edit_proud_form.to.value}}"/>
+                <input type="hidden" name="to" value="{{ edit_core_kudos_form.to.value}}"/>
                     {% comment %} {{ edit_proud_form.to|as_crispy_field }} {% endcomment %}
-                    {{ edit_proud_form.proud_text|as_crispy_field }}
+                    {{ edit_core_kudos_form.proud_text|as_crispy_field }}
                     <span class="input-group-addon"></span>
                     {% for error in field.errors %}
                     <p style="color: red">{{ error }}</p>

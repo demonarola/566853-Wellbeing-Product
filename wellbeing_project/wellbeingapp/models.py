@@ -60,6 +60,7 @@ class CoreKudos(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     pillars = models.ManyToManyField(to='customers.Pillar',related_name='core_kudos',blank=True)
     to = models.CharField(max_length=200,null=True, blank=True)
+    to_person_photo = models.ImageField(upload_to="to_core_kudos/",default='profilepic/default-user.png')
     proud_text = models.TextField(default='',null=True, blank=True)
 
 # for Pledge kudos
@@ -67,6 +68,7 @@ class PledgeKudo(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     pillars = models.ManyToManyField(to='customers.AdminPledge',related_name='pledge_kudo',blank=True)
     to = models.CharField(max_length=200,null=True, blank=True)
+    to_person_photo = models.ImageField(upload_to="to_person_photo/",default='profilepic/default-user.png')
     proud_text = models.TextField(default='',null=True, blank=True)
 
 

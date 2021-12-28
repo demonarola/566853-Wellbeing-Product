@@ -146,7 +146,7 @@ class WellbeingPledgeView(LoginRequiredMixin,APIView):
         connection.set_tenant(company_id)
         company_pillar = Pillar.objects.filter(client_id=company_id.id)
         company_pledge_kudo = AdminPledge.objects.filter(client_id=company_id.id)
-       
+        
         user = request.user
         form = None
         form = AddPledgeForm()
@@ -270,6 +270,7 @@ class EditPledgeCommentView(LoginRequiredMixin,APIView):
             edit_comment_form.save()
             return HttpResponseRedirect('/wellbeing_pledge')
 
+""" ProudView view for Pledge Kudo """
 class ProudView(LoginRequiredMixin,APIView):
     template_name = "proud.html"
     renderer_classes = [TemplateHTMLRenderer]
@@ -296,7 +297,7 @@ class ProudView(LoginRequiredMixin,APIView):
                         "form":form,
                         "pledge_kudo":pledge_kudo,
                         "user":user,
-                        "company_pledge_kudo":company_pledge_kudo
+                        "company_pledge_kudo":company_pledge_kudo,
                         })
 
     def post(self,request):
@@ -310,40 +311,6 @@ class ProudView(LoginRequiredMixin,APIView):
                 proud.pillars.add(pillar_obj)
             proud.save()
             return HttpResponseRedirect('/wellbeing_pledge')
-
-
-# def get(self, request, **kwargs):
-#         """ render proud form """
-        
-#         url = request.get_host().split(':')[0]
-#         dom = Domain.objects.get(domain=url).tenant_id
-#         company_id = Client.objects.get(id=dom)
-#         connection.set_tenant(company_id)
-#         company_pillar = Pillar.objects.filter(client_id=company_id.id)
-
-#         user = request.user
-#         form = None
-#         form = AddProudForm()
-#         proud = PledgeKudo.objects.all()
-#         return Response({
-#                         "title":self.title,
-#                         "logo":company_id.company_logo, 
-#                         "form":form,"proud":proud,
-#                         "user":user,
-#                         "company_pillar":company_pillar
-#                         })
-
-#     def post(self,request):
-#         form = AddProudForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             proud = form.save(commit=False)
-#             proud.created_by = get_object_or_404(User, pk=request.user.id)
-#             proud.save()
-#             proud_text = request.POST.getlist('pillar')
-#             for pillar_obj in proud_text:
-#                 proud.pillars.add(pillar_obj)
-#             proud.save()
-#             return HttpResponseRedirect('/wellbeing_pledge')
 
 class DeleteProudView(LoginRequiredMixin,APIView):
     url='/proud/'
@@ -373,7 +340,6 @@ class EditProudView(LoginRequiredMixin,APIView):
         if edit_proud_form.is_valid():
             edit_proud_form = edit_proud_form.save(commit=False)
             edit_proud_form.save()
-            print("---->bhbhbhbhbhb")
             return HttpResponseRedirect('/proud')
 
 class UserPledgeView(LoginRequiredMixin,APIView):
@@ -451,6 +417,29 @@ class CoreKudoView(LoginRequiredMixin,APIView):
     title = "Core Kudos Details Screen"
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, **kwargs):
+        """ render proud form """
+        
+        url = request.get_host().split(':')[0]
+        dom = Domain.objects.get(domain=url).tenant_id
+        company_id = Client.objects.get(id=dom)
+        connection.set_tenant(company_id)
+        pillars = Pillar.objects.filter(client_id=company_id.id)
+        print(pillars)
+        user = request.user
+        form = None
+        form = AddCoreKudoForm()
+        core_kudos = CoreKudos.objects.all()
+
+        return Response({
+                        "title":self.title,
+                        "logo":company_id.company_logo, 
+                        "form":form,
+                        "core_kudos":core_kudos,
+                        "user":user,
+                        "pillars":pillars
+                        })
+
     def post(self,request):
         form = AddCoreKudoForm(request.POST, request.FILES)
         if form.is_valid():
@@ -462,3 +451,69 @@ class CoreKudoView(LoginRequiredMixin,APIView):
                 core_kudo.pillars.add(core_kudo_obj)
             core_kudo.save()
             return HttpResponseRedirect('/wellbeing_pledge')
+
+class DeleteCoreKudoView(LoginRequiredMixin,APIView):
+    url='/core_kudo/'
+    permission_classes = [IsAuthenticated]
+
+    def get(self,request,id):
+        """ render comment form """
+        obj = CoreKudos.objects.get(id=id)
+        obj.delete()
+        return HttpResponseRedirect('/core_kudo')
+
+class EditCoreKudosView(LoginRequiredMixin,APIView):
+    template_name = "edit_core_kudos.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAuthenticated]
+    # title = "Project Manager Screen"
+
+    def get(self, request,pk, *args, **kwargs):
+        obj = CoreKudos.objects.get(id=pk)
+        edit_core_kudos_form = AddCoreKudoForm(instance=obj)
+        return Response({'edit_core_kudos_form':edit_core_kudos_form, 'pk':obj.id})
+
+    def post(self,request,pk,*args, **kwargs):
+        comment = CoreKudos.objects.get(id=pk)
+        edit_core_kudos_form = AddCoreKudoForm(request.POST, instance=comment)
+        print(edit_core_kudos_form.errors)
+        if edit_core_kudos_form.is_valid():
+            edit_core_kudos_form = edit_core_kudos_form.save(commit=False)
+            edit_core_kudos_form.save()
+            return HttpResponseRedirect('/core_kudo')
+
+class EditPledgeKudosPhotoView(LoginRequiredMixin,APIView):
+    template_name = "edit_pledge_kudos_photo.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request,pk, *args, **kwargs):
+        obj = PledgeKudo.objects.get(id=pk)
+        edit_form = EditPledgeKudosPhotoForm(instance=obj)
+        return Response({'edit_form':edit_form, 'pk':obj.id})
+
+    def post(self,request,pk,*args, **kwargs):
+        pledgekudo = PledgeKudo.objects.get(id=pk)
+        edit_form = EditPledgeKudosPhotoForm(request.POST,request.FILES, instance=pledgekudo)
+        if edit_form.is_valid():
+            edit_form = edit_form.save(commit=False)
+            edit_form.save()
+            return HttpResponseRedirect('/proud')
+
+class EditCoreKudosPhotoView(LoginRequiredMixin,APIView):
+    template_name = "edit_core_kudos_photo.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request,pk, *args, **kwargs):
+        obj = CoreKudos.objects.get(id=pk)
+        edit_form = EditCoreKudosPhotoForm(instance=obj)
+        return Response({'edit_form':edit_form, 'pk':obj.id})
+
+    def post(self,request,pk,*args, **kwargs):
+        corekudo = CoreKudos.objects.get(id=pk)
+        edit_form = EditCoreKudosPhotoForm(request.POST,request.FILES, instance=corekudo)
+        if edit_form.is_valid():
+            edit_form = edit_form.save(commit=False)
+            edit_form.save()
+            return HttpResponseRedirect('/core_kudo')

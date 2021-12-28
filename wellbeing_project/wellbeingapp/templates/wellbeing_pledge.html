@@ -19,7 +19,7 @@
         {% if request.user.is_staff and is_manager == None %}
                 <h3 class="text-center" style="color:red">Project Manager Landing Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
-                <a href="#" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
+                <a href="{% url 'corekudo' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
                 <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a>
                 <a href="{% url 'proud' %}"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
                 <a data-toggle="modal" href="#addPledgeKudos"class="open-AddDialog btn btn-default mt-3">Add Pledge Kudos</a>
@@ -32,9 +32,10 @@
             {% if is_manager == 'True' or not  request.user.is_staff %}
                 <h3 class="text-center">Pledge Kudos Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
-                <a href="{% url 'proud' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
+                <a href="{% url 'corekudo' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
                 <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a>
-                <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
+                <a href="{% url 'proud' %}"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
+                {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a> {% endcomment %}
                 <a data-toggle="modal" href="#addPledgeKudos"class="open-AddDialog btn btn-default mt-3">Add Pledge Kudos</a>
                 {% if not request.user.is_staff %}
                 <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a><br>
@@ -89,13 +90,14 @@
                 <table>
                     <tr>
                         <td>
-                           {% for pillar in data.admin_pledge.all %}
-                            
-                                <span style="color:red">Pillar Name: {{pillar}}</span>
-                                {% if not  forloop.last %}
-                                ,
-                                {% endif %}
-                            {% endfor %} 
+                            <span style="color:red">Pillar Name:
+                                {% for pillar in data.admin_pledge.all %}
+                                    {{pillar}}
+                                    {% if not  forloop.last %}
+                                    ,
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
                             : {{data.pledge_text}}
                         </td>
                     </tr>
@@ -197,7 +199,7 @@
                     <form method="post" action="/core_kudo/" enctype="multipart/form-data">
                         {% csrf_token %}
                         
-                        <label for="{{ core_kudo }}">Choose Piller Name:</label>
+                        <label for="{{ core_kudo }}">Choose Pillar Name:</label>
                         {% comment %} <select class="selectpicker" multiple name="pillar" data-live-search="true" required> {% endcomment %}
                         <select id="choices-multiple-remove-button" placeholder="" multiple name="core_kudos" data-live-search="true" required>
                             {% for core_kudo in company_pillar %}
@@ -234,7 +236,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add New Pledge1212</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Pledge</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -244,7 +246,7 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="{{ pillar }}">Choose a Pillar:</label>
+                                    <label for="{{ pillar }}">Choose a Pledge:</label>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="row d-flex justify-content-center mt-100">

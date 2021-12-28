@@ -22,45 +22,53 @@
         <a href="#" class="btn btn-default mt-3">Employee Benefits</a> {% endcomment %}
     </div>
     <div class="btn-container" style='margin:2%0%2%0%;'>
-        {% for data in proud %}
+        {% for data in pledge_kudo %}
         <div class="row">
-            <div class="col-sm-1">
-            </div>
-            <div class="col-sm-1">
-                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:80px; width: 80px"><br>
-            </div>
-            <div class="col-sm-9">
-                <span style="color:red"> Kudo From: </span>{{data.created_by.first_name}}
-                <div class="row">
-                    <div class="col-sm-12">
-                    <span style="color:red">To: </span>{{data.to}}
-                    </div>
-                </div>
-            </div><br><br>
+        <div class="col-sm-1">
         </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-6">
+            <span style="color:red; font-size:140%"> Pledge Name: </span>  
+            <span style="font-size:140%">
+                {% for pillar in data.pillars.all %}
+                    {{pillar}}
+                    {% if not  forloop.last %}
+                    ,
+                    {% endif %}
+                {% endfor %}
+            </span>
+        </div>
+        </div><br>
         <div class="row">
             <div class="col-sm-1">
             </div>
-            <div class="col-sm-10">
-                <span style="color:red"> Pillars:   
-                    {% for pillar in data.pillars.all %}
-                        {{pillar}}
-                        {% if not  forloop.last %}
-                        ,
-                        {% endif %}:
-                    {% endfor %}
-                </span>
-                {{data.proud_text}}&nbsp;
-                {% if not request.user.is_staff %}
-                <a style="color:#118c66" data-toggle="editProudModal" onclick = 'editproudpopup("{{data.id}}")'><i class="material-icons">edit</i></a>
-                <a href="{% url 'delete_proud' data.id %} " style="color:#118c66"><i class="material-icons">delete</i></a>    
+            <div class="col-sm-2">
+                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:100px; width: 100px"><br>
+                <span style="color:red"> From: </span>{{data.created_by.first_name}}
+            </div>
+            <div class="col-sm-2">
+                <img src="/media/{{data.to_person_photo}}" style="height:100px; width: 100px">
+                {% if data.to_person_photo == "profilepic/default-user.png" %}
+                    {% if request.user == data.created_by %}
+                    <a style="color:#118c66" data-toggle="editPledgeKudosPhotModal" onclick = 'editpledgekudophotopopup("{{data.id}}")'><i class="material-icons">edit</i></a>
+                    {% endif %}
+                {% endif %}<br>
+                <span style="color:red"> To: </span>{{data.to}}
+            </div>
+            <div class="col-sm-6">
+                {{data.proud_text}}
+                {% if request.user == data.created_by %}
+                    <a style="color:#118c66" data-toggle="editProudModal" onclick = 'editproudpopup("{{data.id}}")'><i id="edit-pledge" class="material-icons">edit</i></a>
+                    <a href="{% url 'delete_proud' data.id %} " style="color:#118c66"><i class="material-icons">delete</i></a>
                 {% endif %}
             </div>
-            
-        </div>
+        </div><br>
         
         {% endfor %}
-    </div>
+    </div><hr>
     <div class="rows text-right">
         <div class="col-sm-12">
             {% if not request.user.is_staff %}
@@ -96,6 +104,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     {{ form.to|as_crispy_field }}
+                                    {{ form.to_person_photo|as_crispy_field }}
                                     {{ form.proud_text|as_crispy_field }}
                                     <span class="input-group-addon"></span>
                                     {% for error in field.errors %}
@@ -131,6 +140,22 @@
             </div>
         </div>
     </div>
+    <!-- Edit/Update Pledge Kudos Photo Modal View -->
+    <div class="modal hide" id="editPledgeKudosPhotModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPledgeKudosPhotModalLabel">Edit Photo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body" id='edit_pledge_kudo_photo'>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock content %}
 {% block scripts %}
@@ -154,6 +179,23 @@
             url:'/edit_proud/'+proud_id,
             success:function(data){
                 $('#edit_proud').html(data)
+            }
+
+        })
+    }
+</script>
+<!-- Edit Pledge Kudos Photo -->
+<script>
+    function editpledgekudophotopopup(kudo_id)
+    {   
+        $('#editPledgeKudosPhotModal').modal('show');
+
+
+        $.ajax({
+            type:'GET',
+            url:'/edit_pledge_kudos_photo/'+kudo_id,
+            success:function(data){
+                $('#edit_pledge_kudo_photo').html(data)
             }
 
         })
