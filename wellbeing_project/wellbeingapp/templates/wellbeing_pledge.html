@@ -165,6 +165,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     {{ pledge_kudo_form.to|as_crispy_field }}
+                                    {{ pledge_kudo_form.to_person_photo|as_crispy_field }}
                                     {{ pledge_kudo_form.proud_text|as_crispy_field }}
                                     <span class="input-group-addon"></span>
                                     {% for error in field.errors %}
@@ -211,6 +212,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     {{ core_kudo_form.to|as_crispy_field }}
+                                    {{ core_kudo_form.to_person_photo|as_crispy_field }}
                                     {{ core_kudo_form.proud_text|as_crispy_field }}
                                     <span class="input-group-addon"></span>
                                     {% for error in field.errors %}
