@@ -19,10 +19,10 @@
         {% if request.user.is_staff and is_manager == None %}
                 <h3 class="text-center" style="color:red">Project Manager Landing Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
-                <a href="{% url 'corekudo' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
-                <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a>
-                <a href="{% url 'proud' %}"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
+                <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Value Kudos</a>
+                <a href="{% url 'corekudo' %}" class="open-AddDialog btn btn-default mt-3">See Core Value Kudos</a>
                 <a data-toggle="modal" href="#addPledgeKudos"class="open-AddDialog btn btn-default mt-3">Add Pledge Kudos</a>
+                <a href="{% url 'proud' %}"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
                 {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a> {% endcomment %}
                 <a data-toggle="modal" href="#addPledge" class="open-AddDialog btn btn-default mt-3">Add New Pledge</a>
                 <a href="#" class="inactive_buttons btn btn-default mt-3">See Employee Benefits</a>
@@ -32,15 +32,17 @@
             {% if is_manager == 'True' or not  request.user.is_staff %}
                 <h3 class="text-center">Pledge Kudos Page</h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
-                <a href="{% url 'corekudo' %}" class="open-AddDialog btn btn-default mt-3">See Core Values Kudos</a>
-                <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Values Kudos</a>
+                <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Value Kudos</a>
+                <a href="{% url 'corekudo' %}" class="open-AddDialog btn btn-default mt-3">See Core Value Kudos</a>
+                <a data-toggle="modal" href="#addPledgeKudos"class="open-AddDialog btn btn-default mt-3">Add Pledge Kudos</a>
                 <a href="{% url 'proud' %}"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a>
                 {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">See Pledge Kudos</a> {% endcomment %}
-                <a data-toggle="modal" href="#addPledgeKudos"class="open-AddDialog btn btn-default mt-3">Add Pledge Kudos</a>
                 {% if not request.user.is_staff %}
-                <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a><br>
+                <a data-toggle="modal" href="#addUserPledge" class="open-AddDialog btn btn-default mt-3">Suggest New Pledge</a>
+                {% endif %}
+                <a href="#" class="inactive_buttons btn btn-default mt-3">See Employee Benefits</a>
+                <a href="#" class="inactive_buttons btn btn-default mt-3">Add Employee Benefits</a>
             {% endif %}
-        {% endif %}
         {% endif %}
     </div>
     <br>
@@ -144,7 +146,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Pledge Kudo</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Kudo for Wellbeing Pledge</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -191,7 +193,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Core Values Kudos</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Kudo for Core Value Pillar</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

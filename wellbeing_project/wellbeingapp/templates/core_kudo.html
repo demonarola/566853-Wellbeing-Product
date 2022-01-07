@@ -72,9 +72,9 @@
     </div><hr>
     <div class="rows text-right">
         <div class="col-sm-12">
-            {% if not request.user.is_staff %}
+            {% comment %} {% if not request.user.is_staff %}
                 <a data-toggle="modal" href="#addKudos" class="open-AddDialog btn btn-default mt-3">Add Core Kudo</a>
-            {% endif %}
+            {% endif %} {% endcomment %}
             <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">User Landing Page</a>
         </div>
     </div>

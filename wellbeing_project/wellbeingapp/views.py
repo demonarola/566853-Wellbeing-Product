@@ -274,7 +274,7 @@ class EditPledgeCommentView(LoginRequiredMixin,APIView):
 class ProudView(LoginRequiredMixin,APIView):
     template_name = "proud.html"
     renderer_classes = [TemplateHTMLRenderer]
-    title = "Proud Details Screen"
+    title = ""
     permission_classes = [IsAuthenticated]
 
     def get(self, request, **kwargs):
@@ -414,7 +414,7 @@ class ProfileView(LoginRequiredMixin, APIView):
 class CoreKudoView(LoginRequiredMixin,APIView):
     template_name = "core_kudo.html"
     renderer_classes = [TemplateHTMLRenderer]
-    title = "Core Kudos Details Screen"
+    title = ""
     permission_classes = [IsAuthenticated]
 
     def get(self, request, **kwargs):

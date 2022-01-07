@@ -13,7 +13,7 @@
 <section class="main-section" style="overflow-y: scroll;">
     <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
-        <h3 style="color:red">Pledge Kudos</h3>
+        {% comment %} <h3 style="color:red">Pledge Kudos</h3> {% endcomment %}
     </div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
         {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">Pledge Kudos</a>
@@ -71,10 +71,10 @@
     </div><hr>
     <div class="rows text-right">
         <div class="col-sm-12">
-            {% if not request.user.is_staff %}
+            {% comment %} {% if not request.user.is_staff %}
                 <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Add Kudo</a>
-            {% endif %}
-            <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">User Landing Page</a>
+            {% endif %} {% endcomment %}
+            <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">Landing Page</a>
         </div>
     </div>
     <!-- Add/Create Modal View -->
@@ -83,7 +83,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Pledge Kudo</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Kudo for Wellbeing Pledge</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
