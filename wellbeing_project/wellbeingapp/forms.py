@@ -419,7 +419,7 @@ class AddPledgeForm(forms.ModelForm):
         return person_photo
 
 class UserPledgeForm(forms.ModelForm):
-    pledge_text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Enter pledge text'}))
+    pledge_text = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Enter pledge text'}),required=False)
     class Meta:
         model = UserPledge
         fields = ['pledge_text']
@@ -441,8 +441,8 @@ class AddCommentForm(forms.ModelForm):
 
 class AddProudForm(forms.ModelForm):
     to = forms.CharField(label=_('To'),widget=forms.TextInput(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
-    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':6,'cols':25}))
-    to_person_photo = forms.ImageField(label=_('Photo'))
+    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':6,'cols':25}),required=False)
+    to_person_photo = forms.ImageField(label=_('Photo'),required=False)
     class Meta:
         model = PledgeKudo
         fields = ['to','proud_text','to_person_photo']
@@ -450,8 +450,8 @@ class AddProudForm(forms.ModelForm):
 
 class AddCoreKudoForm(forms.ModelForm):
     to = forms.CharField(label=_('To'),widget=forms.TextInput(attrs={'rows':1,'placeholder': 'Enter Name'}),required=False)
-    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25}))
-    to_person_photo = forms.ImageField(label=_('Photo'))
+    proud_text = forms.CharField(label=_('Kudo Text'),widget=forms.Textarea(attrs={'rows':8,'cols':25}),required=False)
+    to_person_photo = forms.ImageField(label=_('Photo'),required=False)
     class Meta:
         model = CoreKudos
         fields = ['to','proud_text','to_person_photo']

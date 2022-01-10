@@ -42,6 +42,7 @@
                 {% endif %}
                 <a href="#" class="inactive_buttons btn btn-default mt-3">See Employee Benefits</a>
                 <a href="#" class="inactive_buttons btn btn-default mt-3">Add Employee Benefits</a>
+                <a href="/profile" class="open-AddDialog btn btn-default mt-3">Add/Change my photo</a>
             {% endif %}
         {% endif %}
     </div>
@@ -250,7 +251,7 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="{{ pillar }}">Choose a Pledge:</label>
+                                    <label for="{{ pillar }}">Select Pledge Name:</label>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="row d-flex justify-content-center mt-100">
@@ -270,9 +271,9 @@
                                         {% comment %} {{ form.pledge_text|as_crispy_field }} {% endcomment %}
                                          <b>{{ form.pledge_text.label}}:</b>
                                         <div class="row">
-                                            <p style="color:red; margin;margin-left: 10px;">
+                                            {% comment %} <p style="color:red; margin;margin-left: 10px;">
                                                 A pledge kudo is a compliment for participation in special projects called Wellbeing Pledges.
-                                            </p>
+                                            </p> {% endcomment %}
                                         </div>
                                         <textarea id="" name="{{ form.pledge_text.name}}" class="form-control" rows="4" cols="50"></textarea>
                                     </div>

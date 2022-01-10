@@ -13,7 +13,7 @@
 <section class="main-section" style="overflow-y: scroll;">
     <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
-        {% comment %} <h3 style="color:red">Pledge Kudos</h3> {% endcomment %}
+        <h3 style="color:red">Kudo's for Wellbeing Pledges</h3>
     </div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
         {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">Pledge Kudos</a>
@@ -24,30 +24,13 @@
     <div class="btn-container" style='margin:2%0%2%0%;'>
         {% for data in pledge_kudo %}
         <div class="row">
-        <div class="col-sm-1">
-        </div>
-        <div class="col-sm-2">
-        </div>
-        <div class="col-sm-2">
-        </div>
-        <div class="col-sm-6">
-            <span style="color:red; font-size:140%"> Pledge Name: </span>  
-            <span style="font-size:140%">
-                {% for pillar in data.pillars.all %}
-                    {{pillar}}
-                    {% if not  forloop.last %}
-                    ,
-                    {% endif %}
-                {% endfor %}
-            </span>
-        </div>
+            <div class="col-sm-12 d-flex justify-content-center">
+                <span style="color:red; font-size:140%"> Wellbeing Pledge Name: </span>  
+            </div>
         </div><br>
+        
         <div class="row">
             <div class="col-sm-1">
-            </div>
-            <div class="col-sm-2">
-                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:100px; width: 100px"><br>
-                <span style="color:red"> From: </span>{{data.created_by.first_name}}
             </div>
             <div class="col-sm-2">
                 <img src="/media/{{data.to_person_photo}}" style="height:100px; width: 100px">
@@ -56,17 +39,49 @@
                     <a style="color:#118c66" data-toggle="editPledgeKudosPhotModal" onclick = 'editpledgekudophotopopup("{{data.id}}")'><i class="material-icons">edit</i></a>
                     {% endif %}
                 {% endif %}<br>
-                <span style="color:red"> To: </span>{{data.to}}
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-8">
+                <span style="font-size:140%">
+                    {% for pillar in data.pillars.all %}
+                        {{pillar}}
+                        {% if not  forloop.last %}
+                        ,
+                        {% endif %}
+                    {% endfor %}
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+            <span style="color:red"> Pledge Contributor: </span>{{data.to}}
+            </div>
+        </div><br>
+
+
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-2">
+                <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:100px; width: 100px"><br>
+            </div>
+            <div class="col-sm-8">
                 {{data.proud_text}}
                 {% if request.user == data.created_by %}
                     <a style="color:#118c66" data-toggle="editProudModal" onclick = 'editproudpopup("{{data.id}}")'><i id="edit-pledge" class="material-icons">edit</i></a>
                     <a href="{% url 'delete_proud' data.id %} " style="color:#118c66"><i class="material-icons">delete</i></a>
                 {% endif %}
             </div>
-        </div><br>
-        
+        </div>
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+            <span style="color:red"> Pledge Kudo From: </span>{{data.created_by.first_name}}
+            </div>
+            
+        </div><br>        
         {% endfor %}
     </div><hr>
     <div class="rows text-right">
