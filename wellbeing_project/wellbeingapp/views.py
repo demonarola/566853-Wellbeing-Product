@@ -290,7 +290,8 @@ class ProudView(LoginRequiredMixin,APIView):
         form = None
         form = AddProudForm()
         pledge_kudo = PledgeKudo.objects.all()
-
+        select_result = self.request.query_params.get('pledge_kudos')
+        filter_result = PledgeKudo.objects.filter(pillars=select_result)
         return Response({
                         "title":self.title,
                         "logo":company_id.company_logo, 
@@ -298,6 +299,8 @@ class ProudView(LoginRequiredMixin,APIView):
                         "pledge_kudo":pledge_kudo,
                         "user":user,
                         "company_pledge_kudo":company_pledge_kudo,
+                        "selected_pledge":select_result,
+                        "filter_result":filter_result,
                         })
 
     def post(self,request):
@@ -430,14 +433,17 @@ class CoreKudoView(LoginRequiredMixin,APIView):
         form = None
         form = AddCoreKudoForm()
         core_kudos = CoreKudos.objects.all()
-
+        select_result = self.request.query_params.get('core_pillars')
+        filter_result = CoreKudos.objects.filter(pillars=select_result)
         return Response({
                         "title":self.title,
                         "logo":company_id.company_logo, 
                         "form":form,
                         "core_kudos":core_kudos,
                         "user":user,
-                        "pillars":pillars
+                        "pillars":pillars,
+                        "selected_pillar":select_result,
+                        "filter_result":filter_result,
                         })
 
     def post(self,request):

@@ -30,7 +30,7 @@
                 <br>
         {% else %}
             {% if is_manager == 'True' or not  request.user.is_staff %}
-                <h3 class="text-center">Pledge Kudos Page</h3>
+                <h3 class="text-center"></h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
                 <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Value Kudos</a>
                 <a href="{% url 'corekudo' %}" class="open-AddDialog btn btn-default mt-3">See Core Value Kudos</a>
@@ -194,7 +194,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kudo for Core Value Pillar</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Kudo for Core Value</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

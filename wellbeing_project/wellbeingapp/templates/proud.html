@@ -13,7 +13,7 @@
 <section class="main-section" style="overflow-y: scroll;">
     <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
-        <h3 style="color:red">Kudo's for Wellbeing Pledges</h3>
+        <h2 style="color:black">Kudo's for Wellbeing Pledges</h2>
     </div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
         {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">Pledge Kudos</a>
@@ -22,10 +22,27 @@
         <a href="#" class="btn btn-default mt-3">Employee Benefits</a> {% endcomment %}
     </div>
     <div class="btn-container" style='margin:2%0%2%0%;'>
-        {% for data in pledge_kudo %}
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <form action="{% url 'proud' %}" method="GET" enctype="multipart/form-data">
+                
+
+                <label for="{{ pledge }}"><h4>Choose Pledge Name:</h4></label>
+                <select id="pledge_id" name="pledge_kudos" data-live-search="true" required>
+                    {% for pledge in company_pledge_kudo %}
+                        <option value="{{ pledge.id}}">{{ pledge }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="select">
+                </form>
+            </div>
+        </div><br>
+
+        {% for data in filter_result %}
+        
         <div class="row">
             <div class="col-sm-12 d-flex justify-content-center">
-                <span style="color:red; font-size:140%"> Wellbeing Pledge Name: </span>  
+                <span style="color:black; font-size:140%"> Wellbeing Pledge Name: </span>  
             </div>
         </div><br>
         

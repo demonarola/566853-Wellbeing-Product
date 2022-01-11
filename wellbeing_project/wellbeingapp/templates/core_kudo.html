@@ -13,7 +13,7 @@
 <section class="main-section" style="overflow-y: scroll;">
     <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
-        <h3 style="color:red">Kudo's for Core Value Pillars</h3>
+        <h2 style="color:black">Kudo's for Core Values</h2>
     </div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
         {% comment %} <a href="/wellbeing_pledge?is_manager=True"class="open-AddDialog btn btn-default mt-3">Pledge Kudos</a>
@@ -22,7 +22,24 @@
         <a href="#" class="btn btn-default mt-3">Employee Benefits</a> {% endcomment %}
     </div>
     <div class="btn-container" style='margin:2%0%2%0%;'>
-        {% for data in core_kudos %}
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <form action="{% url 'corekudo' %}" method="GET" enctype="multipart/form-data">
+                
+
+                <label for="{{ pillar }}"><h4>Choose Core Value Name:</h4></label>
+                <select id="pillar_id" name="core_pillars" data-live-search="true" required>
+                    {% for pillar in pillars %}
+                    <option value="{{ pillar.id}}">{{ pillar }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="select">
+                </form>
+            </div>
+        </div><br>
+            
+        
+        {% for data in filter_result %}
         <div class="row">
         <div class="col-sm-1">
         </div>
@@ -31,7 +48,9 @@
         <div class="col-sm-2">
         </div>
         <div class="col-sm-6">
-            <span style="color:red; font-size:140%"> Core Value Piller Name: </span>  
+            
+
+            <span style="color:black; font-size:140%"> Core Value Name: </span>  
             <span style="font-size:140%">
                 {% for pillar in data.pillars.all %}
                     {{pillar}}
@@ -205,6 +224,7 @@
         })
     }
 </script>
+
 <!-- multiselect dropdown -->
 <script>
 $(document).ready(function(){
