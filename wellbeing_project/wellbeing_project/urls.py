@@ -46,6 +46,7 @@ urlpatterns = [
     path("delete_core_kudos/<int:id>", DeleteCoreKudoView.as_view(), name="delete_core_kudos"),
     path("edit_proud/<int:pk>", EditProudView.as_view(), name="edit_proud"),
     path("edit_pledge_kudos_photo/<int:pk>", EditPledgeKudosPhotoView.as_view(), name="edit_pledge_kudos_photo"),
+    path("edit_core_kudos_photo/<int:pk>", EditCoreKudosPhotoView.as_view(), name="edit_core_kudos_photo"),
     path("delete_proud/<int:id>", DeleteProudView.as_view(), name="delete_proud"),
     path("user_pledge/", UserPledgeView.as_view(), name="user_pledge"),
     path("profile/",ProfileView.as_view(),name="client-profile"),

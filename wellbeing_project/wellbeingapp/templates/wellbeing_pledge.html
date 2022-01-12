@@ -17,7 +17,7 @@
     
     <div class="btn-container text-center" style='margin:0%;'>
         {% if request.user.is_staff and is_manager == None %}
-                <h3 class="text-center" style="color:red">Project Manager Landing Page</h3>
+                <h3 class="text-center" style="color:red"></h3>
                 <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
                 <a data-toggle="modal" href="#addCoreKudos" class="open-AddDialog btn btn-default mt-3">Add Core Value Kudos</a>
                 <a href="{% url 'corekudo' %}" class="open-AddDialog btn btn-default mt-3">See Core Value Kudos</a>

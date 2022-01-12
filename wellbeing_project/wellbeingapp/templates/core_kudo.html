@@ -82,11 +82,14 @@
             <div class="col-sm-1">
             </div>
             <div class="col-sm-10">
-            <p style="text-align: justify;">{{data.proud_text}}
+            <p style="text-align: justify;">
+            <div style='text-align: justify; overflow:auto; height:100px;'>{{data.proud_text}}
+            
                 {% if request.user == data.created_by %}
                     <a style="color:#118c66" data-toggle="editCoreKudosModal" onclick = 'edit_core_kudos_popup("{{data.id}}")'><i id="edit-pledge" class="material-icons">edit</i></a>
                     <a href="{% url 'delete_core_kudos' data.id %} " style="color:#118c66"><i class="material-icons">delete</i></a>
                 {% endif %}
+            </div>
             </p>
             </div>
         </div>
