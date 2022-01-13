@@ -11,7 +11,14 @@
 </style>
 
 <section class="main-section" style="overflow-y: scroll;">
-    <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
+    <div class="row">
+    <div class="col-sm-10">
+    </div>
+    <div class="col-sm-2">
+    <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">Landing Page</a>
+    </div>
+    </div>
+    <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="240px" max-width="370px"></div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
         <h2 style="color:black">Kudo's for Wellbeing Pledges</h2>
     </div>
@@ -104,7 +111,7 @@
             {% comment %} {% if not request.user.is_staff %}
                 <a data-toggle="modal" href="#addProud" class="open-AddDialog btn btn-default mt-3">Add Kudo</a>
             {% endif %} {% endcomment %}
-            <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">Landing Page</a>
+            
         </div>
     </div>
     <!-- Add/Create Modal View -->
