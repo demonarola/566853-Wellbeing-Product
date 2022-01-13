@@ -147,7 +147,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kudo for Wellbeing Pledge</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Kudo for Wellbeing Pledge</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -194,7 +194,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Kudo for Core Value</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Kudo for Core Value</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -203,7 +203,7 @@
                     <form method="post" action="/core_kudo/" enctype="multipart/form-data">
                         {% csrf_token %}
                         
-                        <label for="{{ core_kudo }}">Choose Pillar Name:</label>
+                        <label for="{{ core_kudo }}">Choose Core Value Name:</label>
                         {% comment %} <select class="selectpicker" multiple name="pillar" data-live-search="true" required> {% endcomment %}
                         <select id="choices-multiple-remove-button" placeholder="" multiple name="core_kudos" data-live-search="true" required>
                             {% for core_kudo in company_pillar %}

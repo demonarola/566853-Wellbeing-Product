@@ -16,7 +16,7 @@ class ClientRegistrationForm(forms.ModelForm):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed and no blank spaces.')
     domain = forms.CharField(max_length=100,validators=[alphanumeric],label="Prefix for domain",required=True)
     company_logo = forms.ImageField(label=_('Company Logo'),required=False)
-    pillar = forms.CharField(max_length=100,label="Core Value Pillar Names",required=True,widget=forms.Textarea(attrs={'rows':5,'cols':32}))
+    pillar = forms.CharField(max_length=100,label="Core Value Names",required=True,widget=forms.Textarea(attrs={'rows':5,'cols':32}))
     admin_pledge = forms.CharField(max_length=100,label="Pledge Names",required=True,widget=forms.Textarea(attrs={'rows':5,'cols':32}))
     class Meta:
         model = Client

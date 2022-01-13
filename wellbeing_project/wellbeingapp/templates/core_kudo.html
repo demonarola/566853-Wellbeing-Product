@@ -1,6 +1,6 @@
 {% extends "container.html" %}
 {% load staticfiles %}
-{% block title %}<img src="{% static 'assets/images/com_icon.jpg' %}" alt="" width="40px" class="img-fluid"> {{title}}{% endblock %}
+{% block title %} {{title}}{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -10,7 +10,16 @@
 }
 </style>
 
+
+
 <section class="main-section" style="overflow-y: scroll;">
+    <div class="row">
+    <div class="col-sm-10">
+    </div>
+    <div class="col-sm-2">
+    <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">Landing Page</a></div>
+    </div>
+    
     <div class="d-flex justify-content-center"><img src="{{logo.url}}" height="300px" max-width="400px"></div>
     <div class="btn-container text-center font-weight-bold" style='margin:0%;'>
         <h2 style="color:black">Kudo's for Core Values</h2>
@@ -41,16 +50,8 @@
         
         {% for data in filter_result %}
         <div class="row">
-        <div class="col-sm-1">
-        </div>
-        <div class="col-sm-2">
-        </div>
-        <div class="col-sm-2">
-        </div>
-        <div class="col-sm-6">
-            
-
-            <span style="color:black; font-size:140%"> Core Value Name: </span>  
+            <div class="col-sm-12 text-center">
+            <b><span style="color:black; font-size:140%;"> Core Value Name: </span>  
             <span style="font-size:140%">
                 {% for pillar in data.pillars.all %}
                     {{pillar}}
@@ -59,16 +60,17 @@
                     {% endif %}
                 {% endfor %}
             </span>
+            </b>
         </div>
         </div><br>
         <div class="row">
             <div class="col-sm-1">
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-2">
                 <img src="/media/{{data.created_by.profile.profile_picture}}" style="height:100px; width: 100px"><br>
                 <span style="color:red"> From: </span>{{data.created_by.first_name}}
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-2">
                 <img src="/media/{{data.to_person_photo}}" style="height:100px; width: 100px">
                 {% if data.to_person_photo == "profilepic/default-user.png" %}
                     {% if request.user == data.created_by %}
@@ -77,13 +79,9 @@
                 {% endif %}<br>
                 <span style="color:red"> To: </span>{{data.to}}
             </div>
-        </div><br>
-        <div class="row">
-            <div class="col-sm-1">
-            </div>
-            <div class="col-sm-10">
-            <p style="text-align: justify;">
-            <div style='text-align: justify; overflow:auto; height:100px;'>{{data.proud_text}}
+            <div class="col-sm-6">
+                <p style="text-align: justify;">
+                <div style='text-align: justify; overflow:auto; height:105px; font-size: 18px;'>{{data.proud_text}}
             
                 {% if request.user == data.created_by %}
                     <a style="color:#118c66" data-toggle="editCoreKudosModal" onclick = 'edit_core_kudos_popup("{{data.id}}")'><i id="edit-pledge" class="material-icons">edit</i></a>
@@ -92,15 +90,22 @@
             </div>
             </p>
             </div>
+        </div><br>
+        <div class="row">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+            
+            </div>
         </div>
         {% endfor %}
-    </div><hr>
+    </div>
     <div class="rows text-right">
         <div class="col-sm-12">
             {% comment %} {% if not request.user.is_staff %}
                 <a data-toggle="modal" href="#addKudos" class="open-AddDialog btn btn-default mt-3">Add Core Kudo</a>
             {% endif %} {% endcomment %}
-            <a href="{% url 'wellbeing_pledge' %}" class="open-AddDialog btn btn-default mt-3">User Landing Page</a>
+            
         </div>
     </div>
     <!-- Add/Create Modal View -->
